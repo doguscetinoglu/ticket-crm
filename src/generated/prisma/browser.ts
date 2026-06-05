@@ -23,6 +23,11 @@ export * from './enums';
  */
 export type User = Prisma.UserModel
 /**
+ * Model Notification
+ * 
+ */
+export type Notification = Prisma.NotificationModel
+/**
  * Model Customer
  * 
  */
@@ -32,6 +37,16 @@ export type Customer = Prisma.CustomerModel
  * 
  */
 export type Ticket = Prisma.TicketModel
+/**
+ * Model Survey
+ * 
+ */
+export type Survey = Prisma.SurveyModel
+/**
+ * Model SurveyResponse
+ * 
+ */
+export type SurveyResponse = Prisma.SurveyResponseModel
 /**
  * Model TicketReply
  * 

@@ -30,12 +30,14 @@ export type TicketReplyAvgAggregateOutputType = {
   id: number | null
   ticketId: number | null
   userId: number | null
+  workMinutes: number | null
 }
 
 export type TicketReplySumAggregateOutputType = {
   id: number | null
   ticketId: number | null
   userId: number | null
+  workMinutes: number | null
 }
 
 export type TicketReplyMinAggregateOutputType = {
@@ -45,6 +47,9 @@ export type TicketReplyMinAggregateOutputType = {
   body: string | null
   isInternal: boolean | null
   attachments: string | null
+  workMinutes: number | null
+  solutionType: string | null
+  platform: string | null
   createdAt: Date | null
 }
 
@@ -55,6 +60,9 @@ export type TicketReplyMaxAggregateOutputType = {
   body: string | null
   isInternal: boolean | null
   attachments: string | null
+  workMinutes: number | null
+  solutionType: string | null
+  platform: string | null
   createdAt: Date | null
 }
 
@@ -65,6 +73,9 @@ export type TicketReplyCountAggregateOutputType = {
   body: number
   isInternal: number
   attachments: number
+  workMinutes: number
+  solutionType: number
+  platform: number
   createdAt: number
   _all: number
 }
@@ -74,12 +85,14 @@ export type TicketReplyAvgAggregateInputType = {
   id?: true
   ticketId?: true
   userId?: true
+  workMinutes?: true
 }
 
 export type TicketReplySumAggregateInputType = {
   id?: true
   ticketId?: true
   userId?: true
+  workMinutes?: true
 }
 
 export type TicketReplyMinAggregateInputType = {
@@ -89,6 +102,9 @@ export type TicketReplyMinAggregateInputType = {
   body?: true
   isInternal?: true
   attachments?: true
+  workMinutes?: true
+  solutionType?: true
+  platform?: true
   createdAt?: true
 }
 
@@ -99,6 +115,9 @@ export type TicketReplyMaxAggregateInputType = {
   body?: true
   isInternal?: true
   attachments?: true
+  workMinutes?: true
+  solutionType?: true
+  platform?: true
   createdAt?: true
 }
 
@@ -109,6 +128,9 @@ export type TicketReplyCountAggregateInputType = {
   body?: true
   isInternal?: true
   attachments?: true
+  workMinutes?: true
+  solutionType?: true
+  platform?: true
   createdAt?: true
   _all?: true
 }
@@ -206,6 +228,9 @@ export type TicketReplyGroupByOutputType = {
   body: string
   isInternal: boolean
   attachments: string | null
+  workMinutes: number | null
+  solutionType: string | null
+  platform: string | null
   createdAt: Date
   _count: TicketReplyCountAggregateOutputType | null
   _avg: TicketReplyAvgAggregateOutputType | null
@@ -239,6 +264,9 @@ export type TicketReplyWhereInput = {
   body?: Prisma.StringFilter<"TicketReply"> | string
   isInternal?: Prisma.BoolFilter<"TicketReply"> | boolean
   attachments?: Prisma.StringNullableFilter<"TicketReply"> | string | null
+  workMinutes?: Prisma.IntNullableFilter<"TicketReply"> | number | null
+  solutionType?: Prisma.StringNullableFilter<"TicketReply"> | string | null
+  platform?: Prisma.StringNullableFilter<"TicketReply"> | string | null
   createdAt?: Prisma.DateTimeFilter<"TicketReply"> | Date | string
   ticket?: Prisma.XOR<Prisma.TicketScalarRelationFilter, Prisma.TicketWhereInput>
   user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
@@ -251,6 +279,9 @@ export type TicketReplyOrderByWithRelationInput = {
   body?: Prisma.SortOrder
   isInternal?: Prisma.SortOrder
   attachments?: Prisma.SortOrderInput | Prisma.SortOrder
+  workMinutes?: Prisma.SortOrderInput | Prisma.SortOrder
+  solutionType?: Prisma.SortOrderInput | Prisma.SortOrder
+  platform?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   ticket?: Prisma.TicketOrderByWithRelationInput
   user?: Prisma.UserOrderByWithRelationInput
@@ -266,6 +297,9 @@ export type TicketReplyWhereUniqueInput = Prisma.AtLeast<{
   body?: Prisma.StringFilter<"TicketReply"> | string
   isInternal?: Prisma.BoolFilter<"TicketReply"> | boolean
   attachments?: Prisma.StringNullableFilter<"TicketReply"> | string | null
+  workMinutes?: Prisma.IntNullableFilter<"TicketReply"> | number | null
+  solutionType?: Prisma.StringNullableFilter<"TicketReply"> | string | null
+  platform?: Prisma.StringNullableFilter<"TicketReply"> | string | null
   createdAt?: Prisma.DateTimeFilter<"TicketReply"> | Date | string
   ticket?: Prisma.XOR<Prisma.TicketScalarRelationFilter, Prisma.TicketWhereInput>
   user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
@@ -278,6 +312,9 @@ export type TicketReplyOrderByWithAggregationInput = {
   body?: Prisma.SortOrder
   isInternal?: Prisma.SortOrder
   attachments?: Prisma.SortOrderInput | Prisma.SortOrder
+  workMinutes?: Prisma.SortOrderInput | Prisma.SortOrder
+  solutionType?: Prisma.SortOrderInput | Prisma.SortOrder
+  platform?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.TicketReplyCountOrderByAggregateInput
   _avg?: Prisma.TicketReplyAvgOrderByAggregateInput
@@ -296,6 +333,9 @@ export type TicketReplyScalarWhereWithAggregatesInput = {
   body?: Prisma.StringWithAggregatesFilter<"TicketReply"> | string
   isInternal?: Prisma.BoolWithAggregatesFilter<"TicketReply"> | boolean
   attachments?: Prisma.StringNullableWithAggregatesFilter<"TicketReply"> | string | null
+  workMinutes?: Prisma.IntNullableWithAggregatesFilter<"TicketReply"> | number | null
+  solutionType?: Prisma.StringNullableWithAggregatesFilter<"TicketReply"> | string | null
+  platform?: Prisma.StringNullableWithAggregatesFilter<"TicketReply"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"TicketReply"> | Date | string
 }
 
@@ -303,6 +343,9 @@ export type TicketReplyCreateInput = {
   body: string
   isInternal?: boolean
   attachments?: string | null
+  workMinutes?: number | null
+  solutionType?: string | null
+  platform?: string | null
   createdAt?: Date | string
   ticket: Prisma.TicketCreateNestedOneWithoutRepliesInput
   user?: Prisma.UserCreateNestedOneWithoutRepliesInput
@@ -315,6 +358,9 @@ export type TicketReplyUncheckedCreateInput = {
   body: string
   isInternal?: boolean
   attachments?: string | null
+  workMinutes?: number | null
+  solutionType?: string | null
+  platform?: string | null
   createdAt?: Date | string
 }
 
@@ -322,6 +368,9 @@ export type TicketReplyUpdateInput = {
   body?: Prisma.StringFieldUpdateOperationsInput | string
   isInternal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   attachments?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  solutionType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platform?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ticket?: Prisma.TicketUpdateOneRequiredWithoutRepliesNestedInput
   user?: Prisma.UserUpdateOneWithoutRepliesNestedInput
@@ -334,6 +383,9 @@ export type TicketReplyUncheckedUpdateInput = {
   body?: Prisma.StringFieldUpdateOperationsInput | string
   isInternal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   attachments?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  solutionType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platform?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -344,6 +396,9 @@ export type TicketReplyCreateManyInput = {
   body: string
   isInternal?: boolean
   attachments?: string | null
+  workMinutes?: number | null
+  solutionType?: string | null
+  platform?: string | null
   createdAt?: Date | string
 }
 
@@ -351,6 +406,9 @@ export type TicketReplyUpdateManyMutationInput = {
   body?: Prisma.StringFieldUpdateOperationsInput | string
   isInternal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   attachments?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  solutionType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platform?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -361,6 +419,9 @@ export type TicketReplyUncheckedUpdateManyInput = {
   body?: Prisma.StringFieldUpdateOperationsInput | string
   isInternal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   attachments?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  solutionType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platform?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -381,6 +442,9 @@ export type TicketReplyCountOrderByAggregateInput = {
   body?: Prisma.SortOrder
   isInternal?: Prisma.SortOrder
   attachments?: Prisma.SortOrder
+  workMinutes?: Prisma.SortOrder
+  solutionType?: Prisma.SortOrder
+  platform?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -388,6 +452,7 @@ export type TicketReplyAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
   ticketId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  workMinutes?: Prisma.SortOrder
 }
 
 export type TicketReplyMaxOrderByAggregateInput = {
@@ -397,6 +462,9 @@ export type TicketReplyMaxOrderByAggregateInput = {
   body?: Prisma.SortOrder
   isInternal?: Prisma.SortOrder
   attachments?: Prisma.SortOrder
+  workMinutes?: Prisma.SortOrder
+  solutionType?: Prisma.SortOrder
+  platform?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -407,6 +475,9 @@ export type TicketReplyMinOrderByAggregateInput = {
   body?: Prisma.SortOrder
   isInternal?: Prisma.SortOrder
   attachments?: Prisma.SortOrder
+  workMinutes?: Prisma.SortOrder
+  solutionType?: Prisma.SortOrder
+  platform?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -414,6 +485,7 @@ export type TicketReplySumOrderByAggregateInput = {
   id?: Prisma.SortOrder
   ticketId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  workMinutes?: Prisma.SortOrder
 }
 
 export type TicketReplyCreateNestedManyWithoutUserInput = {
@@ -504,6 +576,9 @@ export type TicketReplyCreateWithoutUserInput = {
   body: string
   isInternal?: boolean
   attachments?: string | null
+  workMinutes?: number | null
+  solutionType?: string | null
+  platform?: string | null
   createdAt?: Date | string
   ticket: Prisma.TicketCreateNestedOneWithoutRepliesInput
 }
@@ -514,6 +589,9 @@ export type TicketReplyUncheckedCreateWithoutUserInput = {
   body: string
   isInternal?: boolean
   attachments?: string | null
+  workMinutes?: number | null
+  solutionType?: string | null
+  platform?: string | null
   createdAt?: Date | string
 }
 
@@ -553,6 +631,9 @@ export type TicketReplyScalarWhereInput = {
   body?: Prisma.StringFilter<"TicketReply"> | string
   isInternal?: Prisma.BoolFilter<"TicketReply"> | boolean
   attachments?: Prisma.StringNullableFilter<"TicketReply"> | string | null
+  workMinutes?: Prisma.IntNullableFilter<"TicketReply"> | number | null
+  solutionType?: Prisma.StringNullableFilter<"TicketReply"> | string | null
+  platform?: Prisma.StringNullableFilter<"TicketReply"> | string | null
   createdAt?: Prisma.DateTimeFilter<"TicketReply"> | Date | string
 }
 
@@ -560,6 +641,9 @@ export type TicketReplyCreateWithoutTicketInput = {
   body: string
   isInternal?: boolean
   attachments?: string | null
+  workMinutes?: number | null
+  solutionType?: string | null
+  platform?: string | null
   createdAt?: Date | string
   user?: Prisma.UserCreateNestedOneWithoutRepliesInput
 }
@@ -570,6 +654,9 @@ export type TicketReplyUncheckedCreateWithoutTicketInput = {
   body: string
   isInternal?: boolean
   attachments?: string | null
+  workMinutes?: number | null
+  solutionType?: string | null
+  platform?: string | null
   createdAt?: Date | string
 }
 
@@ -605,6 +692,9 @@ export type TicketReplyCreateManyUserInput = {
   body: string
   isInternal?: boolean
   attachments?: string | null
+  workMinutes?: number | null
+  solutionType?: string | null
+  platform?: string | null
   createdAt?: Date | string
 }
 
@@ -612,6 +702,9 @@ export type TicketReplyUpdateWithoutUserInput = {
   body?: Prisma.StringFieldUpdateOperationsInput | string
   isInternal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   attachments?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  solutionType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platform?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ticket?: Prisma.TicketUpdateOneRequiredWithoutRepliesNestedInput
 }
@@ -622,6 +715,9 @@ export type TicketReplyUncheckedUpdateWithoutUserInput = {
   body?: Prisma.StringFieldUpdateOperationsInput | string
   isInternal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   attachments?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  solutionType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platform?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -631,6 +727,9 @@ export type TicketReplyUncheckedUpdateManyWithoutUserInput = {
   body?: Prisma.StringFieldUpdateOperationsInput | string
   isInternal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   attachments?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  solutionType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platform?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -640,6 +739,9 @@ export type TicketReplyCreateManyTicketInput = {
   body: string
   isInternal?: boolean
   attachments?: string | null
+  workMinutes?: number | null
+  solutionType?: string | null
+  platform?: string | null
   createdAt?: Date | string
 }
 
@@ -647,6 +749,9 @@ export type TicketReplyUpdateWithoutTicketInput = {
   body?: Prisma.StringFieldUpdateOperationsInput | string
   isInternal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   attachments?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  solutionType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platform?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneWithoutRepliesNestedInput
 }
@@ -657,6 +762,9 @@ export type TicketReplyUncheckedUpdateWithoutTicketInput = {
   body?: Prisma.StringFieldUpdateOperationsInput | string
   isInternal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   attachments?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  solutionType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platform?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -666,6 +774,9 @@ export type TicketReplyUncheckedUpdateManyWithoutTicketInput = {
   body?: Prisma.StringFieldUpdateOperationsInput | string
   isInternal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   attachments?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  solutionType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platform?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -678,6 +789,9 @@ export type TicketReplySelect<ExtArgs extends runtime.Types.Extensions.InternalA
   body?: boolean
   isInternal?: boolean
   attachments?: boolean
+  workMinutes?: boolean
+  solutionType?: boolean
+  platform?: boolean
   createdAt?: boolean
   ticket?: boolean | Prisma.TicketDefaultArgs<ExtArgs>
   user?: boolean | Prisma.TicketReply$userArgs<ExtArgs>
@@ -690,6 +804,9 @@ export type TicketReplySelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   body?: boolean
   isInternal?: boolean
   attachments?: boolean
+  workMinutes?: boolean
+  solutionType?: boolean
+  platform?: boolean
   createdAt?: boolean
   ticket?: boolean | Prisma.TicketDefaultArgs<ExtArgs>
   user?: boolean | Prisma.TicketReply$userArgs<ExtArgs>
@@ -702,6 +819,9 @@ export type TicketReplySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   body?: boolean
   isInternal?: boolean
   attachments?: boolean
+  workMinutes?: boolean
+  solutionType?: boolean
+  platform?: boolean
   createdAt?: boolean
   ticket?: boolean | Prisma.TicketDefaultArgs<ExtArgs>
   user?: boolean | Prisma.TicketReply$userArgs<ExtArgs>
@@ -714,10 +834,13 @@ export type TicketReplySelectScalar = {
   body?: boolean
   isInternal?: boolean
   attachments?: boolean
+  workMinutes?: boolean
+  solutionType?: boolean
+  platform?: boolean
   createdAt?: boolean
 }
 
-export type TicketReplyOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "ticketId" | "userId" | "body" | "isInternal" | "attachments" | "createdAt", ExtArgs["result"]["ticketReply"]>
+export type TicketReplyOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "ticketId" | "userId" | "body" | "isInternal" | "attachments" | "workMinutes" | "solutionType" | "platform" | "createdAt", ExtArgs["result"]["ticketReply"]>
 export type TicketReplyInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   ticket?: boolean | Prisma.TicketDefaultArgs<ExtArgs>
   user?: boolean | Prisma.TicketReply$userArgs<ExtArgs>
@@ -744,6 +867,9 @@ export type $TicketReplyPayload<ExtArgs extends runtime.Types.Extensions.Interna
     body: string
     isInternal: boolean
     attachments: string | null
+    workMinutes: number | null
+    solutionType: string | null
+    platform: string | null
     createdAt: Date
   }, ExtArgs["result"]["ticketReply"]>
   composites: {}
@@ -1176,6 +1302,9 @@ export interface TicketReplyFieldRefs {
   readonly body: Prisma.FieldRef<"TicketReply", 'String'>
   readonly isInternal: Prisma.FieldRef<"TicketReply", 'Boolean'>
   readonly attachments: Prisma.FieldRef<"TicketReply", 'String'>
+  readonly workMinutes: Prisma.FieldRef<"TicketReply", 'Int'>
+  readonly solutionType: Prisma.FieldRef<"TicketReply", 'String'>
+  readonly platform: Prisma.FieldRef<"TicketReply", 'String'>
   readonly createdAt: Prisma.FieldRef<"TicketReply", 'DateTime'>
 }
     

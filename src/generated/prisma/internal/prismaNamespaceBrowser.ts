@@ -52,8 +52,11 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   User: 'User',
+  Notification: 'Notification',
   Customer: 'Customer',
   Ticket: 'Ticket',
+  Survey: 'Survey',
+  SurveyResponse: 'SurveyResponse',
   TicketReply: 'TicketReply',
   Project: 'Project',
   ProjectMember: 'ProjectMember',
@@ -94,6 +97,20 @@ export const UserScalarFieldEnum = {
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
+export const NotificationScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  type: 'type',
+  title: 'title',
+  body: 'body',
+  link: 'link',
+  isRead: 'isRead',
+  createdAt: 'createdAt'
+} as const
+
+export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
+
+
 export const CustomerScalarFieldEnum = {
   id: 'id',
   email: 'email',
@@ -121,6 +138,8 @@ export const TicketScalarFieldEnum = {
   assigneeId: 'assigneeId',
   customerId: 'customerId',
   priority: 'priority',
+  solutionType: 'solutionType',
+  platform: 'platform',
   source: 'source',
   telegramChatId: 'telegramChatId',
   telegramMessageId: 'telegramMessageId',
@@ -132,6 +151,31 @@ export const TicketScalarFieldEnum = {
 export type TicketScalarFieldEnum = (typeof TicketScalarFieldEnum)[keyof typeof TicketScalarFieldEnum]
 
 
+export const SurveyScalarFieldEnum = {
+  id: 'id',
+  ticketId: 'ticketId',
+  token: 'token',
+  sentAt: 'sentAt'
+} as const
+
+export type SurveyScalarFieldEnum = (typeof SurveyScalarFieldEnum)[keyof typeof SurveyScalarFieldEnum]
+
+
+export const SurveyResponseScalarFieldEnum = {
+  id: 'id',
+  surveyId: 'surveyId',
+  q1: 'q1',
+  q2: 'q2',
+  q3: 'q3',
+  q4: 'q4',
+  q5: 'q5',
+  comment: 'comment',
+  submittedAt: 'submittedAt'
+} as const
+
+export type SurveyResponseScalarFieldEnum = (typeof SurveyResponseScalarFieldEnum)[keyof typeof SurveyResponseScalarFieldEnum]
+
+
 export const TicketReplyScalarFieldEnum = {
   id: 'id',
   ticketId: 'ticketId',
@@ -139,6 +183,9 @@ export const TicketReplyScalarFieldEnum = {
   body: 'body',
   isInternal: 'isInternal',
   attachments: 'attachments',
+  workMinutes: 'workMinutes',
+  solutionType: 'solutionType',
+  platform: 'platform',
   createdAt: 'createdAt'
 } as const
 

@@ -43,8 +43,8 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
           {/* Logo — sadece mobilde */}
           <div className="md:hidden flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white font-bold text-xs">T</div>
-            <span className="font-semibold text-slate-800 dark:text-gray-100 text-sm">Ticket CRM</span>
+            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white font-bold text-xs">F</div>
+            <span className="font-semibold text-slate-800 dark:text-gray-100 text-sm">Fox CRM</span>
           </div>
 
           {/* Sağa yasla */}

@@ -7,7 +7,7 @@ import ThemeProvider from "@/components/ThemeProvider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Ticket CRM",
+  title: "Fox CRM",
   description: "Müşteri Destek Yönetimi",
 };
 
