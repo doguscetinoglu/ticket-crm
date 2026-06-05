@@ -76,17 +76,30 @@ export default function HavuzPage() {
   const [assigning, setAssigning] = useState(false);
   const [search, setSearch]     = useState("");
   const [catFilter, setCatFilter] = useState("Tümü");
+  const [isAdmin, setIsAdmin]   = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState<Ticket | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   const fetchAll = useCallback(async () => {
-    const [tRes, uRes] = await Promise.all([
+    const [tRes, uRes, meRes] = await Promise.all([
       fetch("/api/tickets").then(r => r.json()),
       fetch("/api/users").then(r => r.json()),
+      fetch("/api/auth/me").then(r => r.json()),
     ]);
     setTickets((tRes as (Ticket & { assigneeId: number | null })[]).filter(t => !t.assigneeId));
     setUsers(uRes);
+    setIsAdmin(meRes?.isAdmin === true);
   }, []);
 
   useEffect(() => { fetchAll(); const t = setInterval(fetchAll, 15000); return () => clearInterval(t); }, [fetchAll]);
+
+  const deleteTicket = async (ticketId: number) => {
+    setDeleting(true);
+    await fetch(`/api/tickets/${ticketId}`, { method: "DELETE" });
+    setDeleting(false);
+    setDeleteTarget(null);
+    fetchAll();
+  };
 
   const assign = async (ticketId: number, userId: number) => {
     setAssigning(true);
@@ -176,6 +189,12 @@ export default function HavuzPage() {
                       <span className="text-xs bg-slate-100 dark:bg-gray-800 text-slate-500 dark:text-gray-400 px-2 py-0.5 rounded-md">{t.category}</span>
                       <span className="text-xs text-slate-300 dark:text-gray-600 font-mono">#{t.id}</span>
                       <span className="text-xs text-slate-300 dark:text-gray-600 ml-auto">{expanded === t.id ? "▲" : "▼"}</span>
+                      {isAdmin && (
+                        <button onClick={e => { e.stopPropagation(); setDeleteTarget(t); }}
+                          className="px-3 py-1.5 bg-red-50 dark:bg-red-500/10 hover:bg-red-100 dark:hover:bg-red-500/20 text-red-600 dark:text-red-400 text-xs font-semibold rounded-xl transition-colors border border-red-200 dark:border-red-500/20">
+                          Sil
+                        </button>
+                      )}
                       <button onClick={e => { e.stopPropagation(); setSelected(t); }}
                         className="px-4 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-xl transition-colors shadow-sm shadow-indigo-600/20">
                         Ata
@@ -197,6 +216,22 @@ export default function HavuzPage() {
               )}
             </div>
           ))}
+        </div>
+      )}
+
+      {deleteTarget && (
+        <div className="fixed inset-0 bg-black/40 dark:bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => setDeleteTarget(null)}>
+          <div className="bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800 rounded-2xl p-6 w-full max-w-sm shadow-2xl" onClick={e => e.stopPropagation()}>
+            <h2 className="text-base font-bold text-slate-900 dark:text-gray-100 mb-1">Ticketı Sil</h2>
+            <p className="text-sm text-slate-500 dark:text-gray-500 mb-5">#{deleteTarget.id} — <span className="font-medium">{deleteTarget.subject}</span> silinecek. Bu işlem geri alınamaz.</p>
+            <div className="flex gap-2">
+              <button onClick={() => setDeleteTarget(null)} className="flex-1 py-2 text-sm text-slate-600 dark:text-gray-400 bg-slate-100 dark:bg-gray-800 hover:bg-slate-200 dark:hover:bg-gray-700 rounded-xl transition-colors font-medium">İptal</button>
+              <button onClick={() => deleteTicket(deleteTarget.id)} disabled={deleting}
+                className="flex-1 py-2 text-sm text-white bg-red-600 hover:bg-red-700 rounded-xl transition-colors font-semibold disabled:opacity-50">
+                {deleting ? "Siliniyor..." : "Evet, Sil"}
+              </button>
+            </div>
+          </div>
         </div>
       )}
 

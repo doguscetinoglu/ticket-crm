@@ -347,9 +347,9 @@ export default function RaporlarPage() {
         )}
       </ChartCard>
 
-      {/* Bottom Row: Agent Performance + Hourly */}
+      {/* Bottom Row: Kullanıcı Performance + Hourly */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <ChartCard title="Agent Performansı">
+        <ChartCard title="Kullanıcı Performansı">
           {loading ? <Skeleton /> : (
             <ResponsiveContainer width="100%" height={220}>
               <BarChart data={data?.agentPerf ?? []} layout="vertical" barSize={10} margin={{ left: 10, right: 20 }}>
@@ -380,17 +380,17 @@ export default function RaporlarPage() {
         </ChartCard>
       </div>
 
-      {/* Agent Table */}
+      {/* Kullanıcı Table */}
       {(data?.agentPerf?.length ?? 0) > 0 && (
         <div className="bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800 rounded-2xl shadow-sm dark:shadow-none overflow-hidden">
           <div className="px-5 py-4 border-b border-slate-100 dark:border-gray-800">
-            <h3 className="text-sm font-semibold text-slate-800 dark:text-gray-200">Agent Özet Tablosu</h3>
+            <h3 className="text-sm font-semibold text-slate-800 dark:text-gray-200">Kullanıcı Özet Tablosu</h3>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-slate-100 dark:border-gray-800 bg-slate-50 dark:bg-gray-900">
-                  {["Agent", "Toplam Ticket", "Çözülen", "Çözüm Oranı", "Performans"].map(h => (
+                  {["Kullanıcı", "Toplam Ticket", "Çözülen", "Çözüm Oranı", "Performans"].map(h => (
                     <th key={h} className="px-5 py-3 text-left text-xs font-semibold text-slate-500 dark:text-gray-500 uppercase tracking-wider">{h}</th>
                   ))}
                 </tr>

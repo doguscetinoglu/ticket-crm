@@ -63,10 +63,124 @@ export async function sendTicketConfirmationEmail(
 
   await transporter.sendMail({
     from: `"Destek Merkezi" <${process.env.EMAIL_FROM}>`,
+    replyTo: process.env.EMAIL_FROM,
     to,
     subject: emailSubject,
     html,
     text: `Destek talebiniz alındı.\n\nTicket #${ticketId}\nKonu: ${subject}\n\nEkibimiz en kısa sürede dönüş yapacaktır.`,
+    encoding: "utf-8",
+  });
+}
+
+export async function sendTicketClosedEmail(
+  to: string,
+  ticketId: number,
+  subject: string,
+  surveyUrl: string,
+): Promise<void> {
+  const emailSubject = `[Ticket #${ticketId}] Destek talebiniz tamamlandı`;
+
+  const starRow = [1, 2, 3, 4, 5]
+    .map(
+      (i) =>
+        `<td style="padding:0 5px;"><div style="width:46px;height:46px;background:${
+          i <= 4 ? "#f59e0b" : "#e2e8f0"
+        };border-radius:12px;font-size:24px;text-align:center;line-height:46px;">${
+          i <= 4 ? "★" : "☆"
+        }</div></td>`,
+    )
+    .join("");
+
+  const html = `<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+</head>
+<body style="margin:0;padding:0;background:#f1f5f9;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+<div style="max-width:600px;margin:32px auto;padding:0 16px;">
+
+  <!-- Header -->
+  <div style="background:linear-gradient(135deg,#4f46e5,#7c3aed,#a855f7);border-radius:20px 20px 0 0;padding:40px 40px 32px;text-align:center;">
+    <div style="display:inline-block;background:rgba(255,255,255,0.2);border-radius:50%;width:64px;height:64px;line-height:64px;font-size:30px;margin-bottom:16px;">✓</div>
+    <h1 style="margin:0 0 8px;color:#fff;font-size:24px;font-weight:800;letter-spacing:-0.3px;">Destek Talebiniz Tamamlandı</h1>
+    <p style="margin:0;color:rgba(255,255,255,0.75);font-size:14px;">Talebiniz başarıyla çözüme kavuştu.</p>
+  </div>
+
+  <!-- Body -->
+  <div style="background:#ffffff;padding:36px 40px;border-left:1px solid #e2e8f0;border-right:1px solid #e2e8f0;">
+
+    <!-- Ticket badge -->
+    <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:16px 20px;margin-bottom:28px;">
+      <span style="display:inline-block;background:#ede9fe;color:#7c3aed;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;margin-bottom:8px;">Ticket #${ticketId}</span>
+      <p style="margin:0;font-size:13px;color:#475569;font-weight:600;">${subject}</p>
+    </div>
+
+    <p style="margin:0 0 12px;font-size:15px;color:#1e293b;font-weight:600;">Merhaba,</p>
+    <p style="margin:0 0 28px;font-size:14px;color:#64748b;line-height:1.7;">
+      Destek talebiniz ekibimiz tarafından incelenmiş ve tamamlanmıştır. Daha fazla yardıma ihtiyaç duymanız halinde yeni bir destek talebi oluşturabilirsiniz.
+    </p>
+
+    <!-- Divider -->
+    <div style="border-top:2px dashed #e2e8f0;margin:0 0 28px;"></div>
+
+    <!-- Survey section -->
+    <p style="margin:0 0 6px;font-size:16px;color:#1e293b;font-weight:700;">Deneyiminizi Değerlendirin</p>
+    <p style="margin:0 0 24px;font-size:13px;color:#94a3b8;line-height:1.6;">
+      Yalnızca 2 dakikanızı ayırarak 5 soruluk kısa anketimizi doldurmanızı rica ediyoruz. Görüşleriniz hizmet kalitemizi doğrudan etkiliyor.
+    </p>
+
+    <!-- Stars preview -->
+    <div style="text-align:center;margin:0 0 28px;">
+      <p style="margin:0 0 14px;font-size:11px;color:#94a3b8;text-transform:uppercase;letter-spacing:1.5px;font-weight:700;">GENEL MEMNUNİYETİNİZ</p>
+      <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 auto;">
+        <tr>${starRow}</tr>
+      </table>
+    </div>
+
+    <!-- CTA -->
+    <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="margin:0 0 8px;">
+      <tr>
+        <td align="center">
+          <table cellpadding="0" cellspacing="0" role="presentation">
+            <tr>
+              <td align="center" bgcolor="#5048e5" style="border-radius:50px;background-color:#5048e5;">
+                <a href="${surveyUrl}" target="_blank" rel="noopener noreferrer"
+                   style="display:inline-block;padding:15px 44px;color:#ffffff;text-decoration:none;font-weight:700;font-size:15px;font-family:Arial,Helvetica,sans-serif;border-radius:50px;white-space:nowrap;line-height:1;">
+                  Anketi Doldur &#8594;
+                </a>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <p style="text-align:center;margin:0 0 8px;font-size:12px;color:#94a3b8;">Yaklaşık 2 dakika &middot; Tamamen gönüllüdür</p>
+    <p style="text-align:center;margin:0;font-size:11px;color:#94a3b8;">Buton açılmıyorsa aşağıdaki linki kopyalayın:</p>
+    <p style="text-align:center;margin:4px 0 0;font-size:11px;word-break:break-all;">
+      <a href="${surveyUrl}" style="color:#6366f1;">${surveyUrl}</a>
+    </p>
+
+  </div>
+
+  <!-- Footer -->
+  <div style="background:#f8fafc;border:1px solid #e2e8f0;border-top:none;border-radius:0 0 20px 20px;padding:20px 40px;text-align:center;">
+    <p style="margin:0;font-size:12px;color:#94a3b8;line-height:1.7;">
+      Bu e-posta Destek Merkezi tarafından otomatik gönderilmiştir.<br>
+      Anket bağlantısı 30 gün geçerlidir.
+    </p>
+  </div>
+
+</div>
+</body>
+</html>`;
+
+  await transporter.sendMail({
+    from: `"Destek Merkezi" <${process.env.EMAIL_FROM}>`,
+    to,
+    subject: emailSubject,
+    html,
+    text: `Destek talebiniz (Ticket #${ticketId}) tamamlandı.\n\nKonu: ${subject}\n\nMemnuniyetinizi değerlendirmek için:\n${surveyUrl}\n\nYaklaşık 2 dakika sürer, tamamen gönüllüdür.`,
     encoding: "utf-8",
   });
 }

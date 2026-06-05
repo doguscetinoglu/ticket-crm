@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import Anthropic from "@anthropic-ai/sdk";
 import { sendTicketConfirmationEmail } from "@/lib/email";
+import { createNotification, notifyAdmins } from "@/lib/notifications";
 
 const CATEGORIES = ["Genel", "Teknik Destek", "Fatura", "Öneri", "Şikayet"];
 const PRIORITIES = ["Normal", "Yüksek", "Kritik"];
@@ -37,6 +38,23 @@ Mesaj: ${body.substring(0, 500)}
   } catch {
     return { category: "Genel", priority: "Normal" };
   }
+}
+
+// Email reply'larındaki quote kısmını temizle
+function stripEmailQuote(text: string): string {
+  // "Ad <email>, tarih tarihinde şunu yazdı:" ve sonrası (Türkçe/İngilizce)
+  const quotePatterns = [
+    /\n?[^\n]*<[^\n]+>\s*,?\s*\d{1,2}\s+\w+\s+\d{4}[^\n]*yazdı\s*:[\s\S]*/i,
+    /\n?On\s+.+wrote\s*:[\s\S]*/i,
+    /\n?[-]{2,}\s*(Original Message|Forwarded message)[\s\S]*/i,
+    /\n?>{1}[\s\S]*/,  // "> " ile başlayan quoted satırlar
+  ];
+  let result = text;
+  for (const pattern of quotePatterns) {
+    const cleaned = result.replace(pattern, "").trim();
+    if (cleaned.length > 0) result = cleaned;
+  }
+  return result.trim();
 }
 
 // Ticket ID'yi email konusundan çıkar: "[#42]", "#42", "[Ticket #42]" gibi pattern'lar
@@ -86,8 +104,9 @@ export async function POST(req: NextRequest) {
     const from     = resolveEmail(payload.from);
     const fromName = resolveName(payload.fromName ?? payload.from) ?? resolveName(payload.from);
     const subject  = typeof payload.subject === "string" ? payload.subject.trim() : null;
-    // N8N: body, text veya html
-    const body     = payload.body ?? payload.text ?? payload.html ?? "";
+    // N8N: body, text veya html — quote kısmı temizlenir
+    const rawBody  = payload.body ?? payload.text ?? payload.html ?? "";
+    const body     = stripEmailQuote(typeof rawBody === "string" ? rawBody : String(rawBody));
     const messageId  = payload.messageId ?? payload.message_id ?? null;
     const inReplyTo  = payload.inReplyTo ?? payload.in_reply_to ?? null;
 
@@ -117,11 +136,20 @@ export async function POST(req: NextRequest) {
           data: {
             ticketId: ticket.id,
             userId: null,
-            body: typeof body === "string" ? body : String(body),
+            body,
             isInternal: false,
             attachments: "[]",
           },
         });
+
+        // Müşteri e-posta yanıtı — assigned user + adminlere bildir
+        const notifTitle = "Müşteri E-posta Yanıtı";
+        const notifBody = `"${ticket.subject}" biletine e-posta yanıtı geldi`;
+        if (ticket.assigneeId) {
+          await createNotification(ticket.assigneeId, "customer_reply", notifTitle, notifBody, "/tickets");
+        }
+        await notifyAdmins("customer_reply", notifTitle, notifBody, "/tickets", ticket.assigneeId ?? undefined);
+
         return NextResponse.json({ success: true, reply }, { status: 201 });
       }
     }
@@ -132,7 +160,7 @@ export async function POST(req: NextRequest) {
     const ticket = await prisma.ticket.create({
       data: {
         subject,
-        body: typeof body === "string" ? body : String(body),
+        body,
         fromEmail: from,
         fromName: fromName ?? null,
         category,
@@ -149,6 +177,14 @@ export async function POST(req: NextRequest) {
     } catch (e) {
       console.error("Confirmation email gönderilemedi:", e);
     }
+
+    // Yeni bilet — tüm adminlere bildir
+    await notifyAdmins(
+      "new_ticket",
+      "Yeni Bilet Geldi",
+      `${from} tarafından: "${subject}"`,
+      "/tickets",
+    );
 
     return NextResponse.json({ success: true, ticket }, { status: 201 });
   } catch (err) {

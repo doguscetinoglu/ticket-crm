@@ -133,6 +133,7 @@ export default function ProjelerPage() {
   });
 
   return (
+    <>
     <div className="p-4 md:p-7 space-y-5 animate-fade-in">
       {/* Header */}
       <div className="flex items-center justify-between">
@@ -242,10 +243,13 @@ export default function ProjelerPage() {
         })}
       </div>
 
-      {/* Create Modal */}
+    </div>
+
+      {/* Create Modal — animate-fade-in dışında, fixed doğru çalışsın */}
       {showCreate && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => setShowCreate(false)}>
-          <div className="bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800 rounded-2xl p-6 w-full max-w-lg shadow-2xl max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 overflow-y-auto" onClick={() => setShowCreate(false)}>
+          <div className="min-h-full flex items-center justify-center p-4 py-8">
+          <div className="bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800 rounded-2xl p-6 w-full max-w-lg shadow-2xl" onClick={e => e.stopPropagation()}>
             <h2 className="text-lg font-bold text-slate-900 dark:text-gray-100 mb-5">Yeni Proje</h2>
 
             <div className="space-y-4">
@@ -321,8 +325,9 @@ export default function ProjelerPage() {
               </button>
             </div>
           </div>
+          </div>
         </div>
       )}
-    </div>
+    </>
   );
 }

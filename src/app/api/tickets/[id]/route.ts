@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
+import { randomUUID } from "crypto";
 import { prisma } from "@/lib/prisma";
 import { sendTelegramMessage, statusMessage } from "@/lib/telegram";
+import { createNotification, notifyAdmins } from "@/lib/notifications";
+import { sendTicketClosedEmail } from "@/lib/email";
 
 export async function PATCH(
   req: NextRequest,
@@ -9,14 +12,15 @@ export async function PATCH(
   try {
     const { id } = await params;
     const body = await req.json();
-    const { status, assigneeId, customerId, category, priority } = body;
+    const { status, assigneeId, customerId, category, priority, solutionType, platform } = body;
 
-    // Durum değişikliği için eski durumu al
-    let oldStatus: string | undefined;
-    if (status !== undefined) {
-      const current = await prisma.ticket.findUnique({ where: { id: Number(id) }, select: { status: true } });
-      oldStatus = current?.status;
-    }
+    // Durum değişikliği ve atama değişikliği için mevcut durumu al
+    const current = await prisma.ticket.findUnique({
+      where: { id: Number(id) },
+      select: { status: true, assigneeId: true, subject: true },
+    });
+    const oldStatus = current?.status;
+    const oldAssigneeId = current?.assigneeId;
 
     const ticket = await prisma.ticket.update({
       where: { id: Number(id) },
@@ -26,16 +30,50 @@ export async function PATCH(
         ...(customerId !== undefined && { customerId: customerId === null ? null : Number(customerId) }),
         ...(category !== undefined && { category }),
         ...(priority !== undefined && { priority }),
+        ...(solutionType !== undefined && { solutionType: solutionType || null }),
+        ...(platform !== undefined && { platform: platform || null }),
       },
       include: { assignee: true, customer: true },
     });
 
-    // Durum değiştiyse ve Telegram'dan geldiyse bildirim gönder
+    // Telegram bildirimi
     if (status !== undefined && oldStatus !== status && ticket.telegramChatId) {
       await sendTelegramMessage(
         ticket.telegramChatId,
         statusMessage(ticket.id, ticket.subject, oldStatus!, status)
       );
+    }
+
+    // Atama bildirimi
+    const newAssigneeId = assigneeId !== undefined ? (assigneeId === null ? null : Number(assigneeId)) : undefined;
+    if (
+      newAssigneeId !== undefined &&
+      newAssigneeId !== null &&
+      newAssigneeId !== oldAssigneeId
+    ) {
+      await createNotification(
+        newAssigneeId,
+        "ticket_assigned",
+        "Bilet Atandı",
+        `"${current?.subject}" bileti size atandı`,
+        "/tickets",
+      );
+    }
+
+    // Ticket kapatıldıysa: kapanma maili + anket gönder
+    if (status === "Kapalı" && oldStatus !== "Kapalı") {
+      const existing = await prisma.survey.findUnique({ where: { ticketId: ticket.id } });
+      if (!existing) {
+        const token = randomUUID();
+        await prisma.survey.create({ data: { ticketId: ticket.id, token } });
+        const appUrl = new URL(process.env.APP_URL || "https://ticket-crm-xi.vercel.app").origin;
+        const surveyUrl = `${appUrl}/anket/${token}`;
+        try {
+          await sendTicketClosedEmail(ticket.fromEmail, ticket.id, ticket.subject, surveyUrl);
+        } catch (e) {
+          console.error("Kapanma/anket maili gönderilemedi:", e);
+        }
+      }
     }
 
     return NextResponse.json(ticket);

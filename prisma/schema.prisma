@@ -20,8 +20,23 @@ model User {
   tickets        Ticket[]
   replies        TicketReply[]
   projectMembers ProjectMember[]
+  notifications  Notification[]
 
   @@map("users")
+}
+
+model Notification {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String
+  title     String
+  body      String
+  link      String?
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@map("notifications")
 }
 
 model Customer {
@@ -37,8 +52,29 @@ model Customer {
   updatedAt    DateTime @updatedAt
   tickets   Ticket[]
   projects  Project[]
+  companies CustomerCompany[]
 
   @@map("customers")
+}
+
+model Company {
+  id        Int      @id @default(autoincrement())
+  name      String
+  createdAt DateTime @default(now())
+  customers CustomerCompany[]
+
+  @@map("companies")
+}
+
+model CustomerCompany {
+  id         Int      @id @default(autoincrement())
+  customerId Int
+  companyId  Int
+  customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  company    Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@unique([customerId, companyId])
+  @@map("customer_companies")
 }
 
 model Ticket {
@@ -54,6 +90,8 @@ model Ticket {
   customerId Int?
   customer   Customer?     @relation(fields: [customerId], references: [id])
   priority          String        @default("Normal")
+  solutionType      String?
+  platform          String?
   source            String?       @default("web")
   telegramChatId    String?
   telegramMessageId Int?          @unique
@@ -61,20 +99,50 @@ model Ticket {
   receivedAt        DateTime      @default(now())
   updatedAt         DateTime      @updatedAt
   replies           TicketReply[]
+  survey            Survey?
 
   @@map("tickets")
 }
 
+model Survey {
+  id       Int             @id @default(autoincrement())
+  ticketId Int             @unique
+  ticket   Ticket          @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  token    String          @unique
+  sentAt   DateTime        @default(now())
+  response SurveyResponse?
+
+  @@map("surveys")
+}
+
+model SurveyResponse {
+  id          Int      @id @default(autoincrement())
+  surveyId    Int      @unique
+  survey      Survey   @relation(fields: [surveyId], references: [id], onDelete: Cascade)
+  q1          Int
+  q2          Int
+  q3          Int
+  q4          Int
+  q5          Int
+  comment     String?
+  submittedAt DateTime @default(now())
+
+  @@map("survey_responses")
+}
+
 model TicketReply {
-  id         Int      @id @default(autoincrement())
-  ticketId   Int
-  ticket     Ticket   @relation(fields: [ticketId], references: [id], onDelete: Cascade)
-  userId     Int?
-  user       User?    @relation(fields: [userId], references: [id])
-  body        String
-  isInternal  Boolean  @default(false)
-  attachments String?  @default("[]")
-  createdAt   DateTime @default(now())
+  id           Int      @id @default(autoincrement())
+  ticketId     Int
+  ticket       Ticket   @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  userId       Int?
+  user         User?    @relation(fields: [userId], references: [id])
+  body         String
+  isInternal   Boolean  @default(false)
+  attachments  String?  @default("[]")
+  workMinutes  Int?
+  solutionType String?
+  platform     String?
+  createdAt    DateTime @default(now())
 
   @@map("ticket_replies")
 }

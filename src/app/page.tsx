@@ -24,7 +24,7 @@ interface Stats {
   }[];
   dailyData: { date: string; count: number }[];
   monthlyData: { month: string; count: number }[];
-  topCustomers: { id: number; email: string; name: string | null; company: string | null; _count: { tickets: number } }[];
+  topCustomers: { id: number; email: string; name: string | null; company: string | null; _count: { tickets: number }; totalWorkMinutes: number }[];
 }
 
 function KpiCard({ label, value, sub, color, icon }: {
@@ -350,6 +350,11 @@ export default function Dashboard() {
                   <span className="text-2xl font-bold text-indigo-600 dark:text-indigo-400">{c._count.tickets}</span>
                   <span className="text-[11px] text-slate-400 dark:text-gray-600">bilet</span>
                 </div>
+                {c.totalWorkMinutes > 0 && (
+                  <div className="mt-1 text-[11px] text-slate-400 dark:text-gray-600">
+                    {c.totalWorkMinutes >= 60 ? `${Math.floor(c.totalWorkMinutes / 60)}s ${c.totalWorkMinutes % 60}dk` : `${c.totalWorkMinutes}dk`} harcandı
+                  </div>
+                )}
               </Link>
             ))}
             {(!s?.topCustomers || s.topCustomers.length === 0) && (

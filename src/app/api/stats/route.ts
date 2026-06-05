@@ -103,11 +103,21 @@ export async function GET() {
     const DAYS_TR = ["Paz", "Pzt", "Sal", "Çar", "Per", "Cum", "Cmt"];
     const weekdayData = Object.entries(weekdayMap).map(([day, count]) => ({ day: DAYS_TR[Number(day)], count }));
 
-    const topCustomers = isAdmin ? await prisma.customer.findMany({
-      include: { _count: { select: { tickets: true } } },
+    const topCustomersRaw = isAdmin ? await prisma.customer.findMany({
+      select: {
+        id: true, email: true, name: true, company: true,
+        _count: { select: { tickets: true } },
+        tickets: { select: { replies: { select: { workMinutes: true } } } },
+      },
       orderBy: { tickets: { _count: "desc" } },
       take: 5,
     }) : [];
+    const topCustomers = topCustomersRaw.map(c => ({
+      id: c.id, email: c.email, name: c.name, company: c.company,
+      _count: c._count,
+      totalWorkMinutes: c.tickets.reduce((sum, t) =>
+        sum + t.replies.reduce((s, r) => s + (r.workMinutes ?? 0), 0), 0),
+    }));
 
     return NextResponse.json({
       isAdmin,

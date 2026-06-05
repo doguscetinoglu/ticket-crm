@@ -22,7 +22,7 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   try {
-    const { email, name, company, phone, notes } = await req.json();
+    const { email, name, company, phone, notes, companyIds } = await req.json();
     if (!email) return NextResponse.json({ error: "email zorunlu" }, { status: 400 });
 
     const customer = await prisma.customer.upsert({
@@ -35,6 +35,13 @@ export async function POST(req: NextRequest) {
       },
       create: { email, name, company, phone, notes },
     });
+
+    if (Array.isArray(companyIds) && companyIds.length > 0) {
+      await prisma.customerCompany.createMany({
+        data: companyIds.map((cid: number) => ({ customerId: customer.id, companyId: cid })),
+        skipDuplicates: true,
+      });
+    }
 
     return NextResponse.json(customer, { status: 201 });
   } catch (err) {

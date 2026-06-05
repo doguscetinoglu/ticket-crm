@@ -10,8 +10,8 @@ interface Ticket { id: number; subject: string; status: string; priority: string
 
 const COLORS       = ["blue", "purple", "green", "pink", "orange", "indigo", "teal"];
 const COLOR_LABELS: Record<string, string> = { blue: "Mavi", purple: "Mor", green: "Yeşil", pink: "Pembe", orange: "Turuncu", indigo: "İndigo", teal: "Teal" };
-const ROLES        = ["Agent", "Senior Agent", "Junior Agent", "Team Lead", "Admin"];
-const EMPTY_FORM   = { name: "", email: "", password: "", role: "Agent", color: "indigo", isAdmin: false };
+const ROLES        = ["Kullanıcı", "Admin"];
+const EMPTY_FORM   = { name: "", email: "", password: "", role: "Kullanıcı", color: "indigo", isAdmin: false };
 const COLOR_BG: Record<string, string> = { blue: "bg-blue-600", purple: "bg-purple-600", green: "bg-emerald-600", pink: "bg-pink-600", orange: "bg-orange-500", indigo: "bg-indigo-600", teal: "bg-teal-600" };
 
 const inputCls = "w-full bg-slate-50 dark:bg-gray-800 border border-slate-200 dark:border-gray-700 rounded-xl px-3 py-2 text-sm text-slate-900 dark:text-gray-100 placeholder-slate-400 dark:placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 transition-all";
