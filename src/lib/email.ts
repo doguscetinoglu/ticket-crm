@@ -62,7 +62,7 @@ export async function sendTicketConfirmationEmail(
   `);
 
   await transporter.sendMail({
-    from: `"Fox CRM" <${process.env.EMAIL_FROM}>`,
+    from: `"Destek Merkezi" <${process.env.EMAIL_FROM}>`,
     to,
     subject: emailSubject,
     html,
@@ -175,7 +175,7 @@ export async function sendTicketClosedEmail(
 </html>`;
 
   await transporter.sendMail({
-    from: `"Fox CRM" <${process.env.EMAIL_FROM}>`,
+    from: `"Destek Merkezi" <${process.env.EMAIL_FROM}>`,
     to,
     subject: emailSubject,
     html,
@@ -215,7 +215,7 @@ export async function sendReplyEmail(
     : "";
 
   await transporter.sendMail({
-    from: `"Fox CRM" <${process.env.EMAIL_FROM}>`,
+    from: `"Destek Merkezi" <${process.env.EMAIL_FROM}>`,
     to,
     subject: emailSubject,
     html,
