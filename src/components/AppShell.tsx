@@ -9,7 +9,12 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   const path = usePathname();
   const [open, setOpen] = useState(false);
 
-  if (path === "/login" || path === "/portal" || path.startsWith("/anket/")) return <>{children}</>;
+  if (
+    path === "/login" ||
+    path === "/portal" ||
+    path.startsWith("/anket/") ||
+    path.startsWith("/izin-portal")
+  ) return <>{children}</>;
 
   return (
     <div className="flex min-h-screen bg-slate-50 dark:bg-gray-950">
