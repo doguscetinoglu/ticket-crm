@@ -2222,6 +2222,7 @@ export type ProjectMessageScalarFieldEnum = (typeof ProjectMessageScalarFieldEnu
 
 export const LeaveEmployeeScalarFieldEnum = {
   id: 'id',
+  userId: 'userId',
   email: 'email',
   name: 'name',
   password: 'password',

@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireLeaveSession } from "@/lib/leave-session";
 import { prisma } from "@/lib/prisma";
-import bcrypt from "bcryptjs";
 
 export async function GET() {
   const session = await requireLeaveSession();
@@ -22,17 +21,15 @@ export async function POST(req: NextRequest) {
   const session = await requireLeaveSession();
   if (session.role !== "HR_ADMIN") return NextResponse.json({ error: "Yetkisiz." }, { status: 403 });
 
-  const { name, email, password, role, department, managerId } = await req.json();
-  if (!name || !email || !password) return NextResponse.json({ error: "Ad, e-posta ve şifre zorunludur." }, { status: 400 });
+  const { name, email, role, department, managerId } = await req.json();
+  if (!name || !email) return NextResponse.json({ error: "Ad ve e-posta zorunludur." }, { status: 400 });
 
   const exists = await prisma.leaveEmployee.findUnique({ where: { email } });
   if (exists) return NextResponse.json({ error: "Bu e-posta zaten kayıtlı." }, { status: 400 });
 
-  const hashed = await bcrypt.hash(password, 12);
   const user = await prisma.leaveEmployee.create({
     data: {
       name, email,
-      password: hashed,
       role: role ?? "EMPLOYEE",
       department: department ?? null,
       managerId: managerId || null,

@@ -20,12 +20,23 @@ export type LeaveEmployeeModel = runtime.Types.Result.DefaultSelection<Prisma.$L
 
 export type AggregateLeaveEmployee = {
   _count: LeaveEmployeeCountAggregateOutputType | null
+  _avg: LeaveEmployeeAvgAggregateOutputType | null
+  _sum: LeaveEmployeeSumAggregateOutputType | null
   _min: LeaveEmployeeMinAggregateOutputType | null
   _max: LeaveEmployeeMaxAggregateOutputType | null
 }
 
+export type LeaveEmployeeAvgAggregateOutputType = {
+  userId: number | null
+}
+
+export type LeaveEmployeeSumAggregateOutputType = {
+  userId: number | null
+}
+
 export type LeaveEmployeeMinAggregateOutputType = {
   id: string | null
+  userId: number | null
   email: string | null
   name: string | null
   password: string | null
@@ -38,6 +49,7 @@ export type LeaveEmployeeMinAggregateOutputType = {
 
 export type LeaveEmployeeMaxAggregateOutputType = {
   id: string | null
+  userId: number | null
   email: string | null
   name: string | null
   password: string | null
@@ -50,6 +62,7 @@ export type LeaveEmployeeMaxAggregateOutputType = {
 
 export type LeaveEmployeeCountAggregateOutputType = {
   id: number
+  userId: number
   email: number
   name: number
   password: number
@@ -62,8 +75,17 @@ export type LeaveEmployeeCountAggregateOutputType = {
 }
 
 
+export type LeaveEmployeeAvgAggregateInputType = {
+  userId?: true
+}
+
+export type LeaveEmployeeSumAggregateInputType = {
+  userId?: true
+}
+
 export type LeaveEmployeeMinAggregateInputType = {
   id?: true
+  userId?: true
   email?: true
   name?: true
   password?: true
@@ -76,6 +98,7 @@ export type LeaveEmployeeMinAggregateInputType = {
 
 export type LeaveEmployeeMaxAggregateInputType = {
   id?: true
+  userId?: true
   email?: true
   name?: true
   password?: true
@@ -88,6 +111,7 @@ export type LeaveEmployeeMaxAggregateInputType = {
 
 export type LeaveEmployeeCountAggregateInputType = {
   id?: true
+  userId?: true
   email?: true
   name?: true
   password?: true
@@ -137,6 +161,18 @@ export type LeaveEmployeeAggregateArgs<ExtArgs extends runtime.Types.Extensions.
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: LeaveEmployeeAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: LeaveEmployeeSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: LeaveEmployeeMinAggregateInputType
@@ -167,21 +203,26 @@ export type LeaveEmployeeGroupByArgs<ExtArgs extends runtime.Types.Extensions.In
   take?: number
   skip?: number
   _count?: LeaveEmployeeCountAggregateInputType | true
+  _avg?: LeaveEmployeeAvgAggregateInputType
+  _sum?: LeaveEmployeeSumAggregateInputType
   _min?: LeaveEmployeeMinAggregateInputType
   _max?: LeaveEmployeeMaxAggregateInputType
 }
 
 export type LeaveEmployeeGroupByOutputType = {
   id: string
+  userId: number | null
   email: string
   name: string
-  password: string
+  password: string | null
   role: $Enums.LeaveRole
   department: string | null
   managerId: string | null
   createdAt: Date
   updatedAt: Date
   _count: LeaveEmployeeCountAggregateOutputType | null
+  _avg: LeaveEmployeeAvgAggregateOutputType | null
+  _sum: LeaveEmployeeSumAggregateOutputType | null
   _min: LeaveEmployeeMinAggregateOutputType | null
   _max: LeaveEmployeeMaxAggregateOutputType | null
 }
@@ -206,14 +247,16 @@ export type LeaveEmployeeWhereInput = {
   OR?: Prisma.LeaveEmployeeWhereInput[]
   NOT?: Prisma.LeaveEmployeeWhereInput | Prisma.LeaveEmployeeWhereInput[]
   id?: Prisma.StringFilter<"LeaveEmployee"> | string
+  userId?: Prisma.IntNullableFilter<"LeaveEmployee"> | number | null
   email?: Prisma.StringFilter<"LeaveEmployee"> | string
   name?: Prisma.StringFilter<"LeaveEmployee"> | string
-  password?: Prisma.StringFilter<"LeaveEmployee"> | string
+  password?: Prisma.StringNullableFilter<"LeaveEmployee"> | string | null
   role?: Prisma.EnumLeaveRoleFilter<"LeaveEmployee"> | $Enums.LeaveRole
   department?: Prisma.StringNullableFilter<"LeaveEmployee"> | string | null
   managerId?: Prisma.StringNullableFilter<"LeaveEmployee"> | string | null
   createdAt?: Prisma.DateTimeFilter<"LeaveEmployee"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"LeaveEmployee"> | Date | string
+  user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   manager?: Prisma.XOR<Prisma.LeaveEmployeeNullableScalarRelationFilter, Prisma.LeaveEmployeeWhereInput> | null
   subordinates?: Prisma.LeaveEmployeeListRelationFilter
   leaveBalances?: Prisma.LeaveBalanceListRelationFilter
@@ -223,14 +266,16 @@ export type LeaveEmployeeWhereInput = {
 
 export type LeaveEmployeeOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  userId?: Prisma.SortOrderInput | Prisma.SortOrder
   email?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  password?: Prisma.SortOrder
+  password?: Prisma.SortOrderInput | Prisma.SortOrder
   role?: Prisma.SortOrder
   department?: Prisma.SortOrderInput | Prisma.SortOrder
   managerId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  user?: Prisma.UserOrderByWithRelationInput
   manager?: Prisma.LeaveEmployeeOrderByWithRelationInput
   subordinates?: Prisma.LeaveEmployeeOrderByRelationAggregateInput
   leaveBalances?: Prisma.LeaveBalanceOrderByRelationAggregateInput
@@ -240,37 +285,42 @@ export type LeaveEmployeeOrderByWithRelationInput = {
 
 export type LeaveEmployeeWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  userId?: number
   email?: string
   AND?: Prisma.LeaveEmployeeWhereInput | Prisma.LeaveEmployeeWhereInput[]
   OR?: Prisma.LeaveEmployeeWhereInput[]
   NOT?: Prisma.LeaveEmployeeWhereInput | Prisma.LeaveEmployeeWhereInput[]
   name?: Prisma.StringFilter<"LeaveEmployee"> | string
-  password?: Prisma.StringFilter<"LeaveEmployee"> | string
+  password?: Prisma.StringNullableFilter<"LeaveEmployee"> | string | null
   role?: Prisma.EnumLeaveRoleFilter<"LeaveEmployee"> | $Enums.LeaveRole
   department?: Prisma.StringNullableFilter<"LeaveEmployee"> | string | null
   managerId?: Prisma.StringNullableFilter<"LeaveEmployee"> | string | null
   createdAt?: Prisma.DateTimeFilter<"LeaveEmployee"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"LeaveEmployee"> | Date | string
+  user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   manager?: Prisma.XOR<Prisma.LeaveEmployeeNullableScalarRelationFilter, Prisma.LeaveEmployeeWhereInput> | null
   subordinates?: Prisma.LeaveEmployeeListRelationFilter
   leaveBalances?: Prisma.LeaveBalanceListRelationFilter
   leaveRequests?: Prisma.LeaveRequestListRelationFilter
   announcementReads?: Prisma.LeaveAnnouncementReadListRelationFilter
-}, "id" | "email">
+}, "id" | "userId" | "email">
 
 export type LeaveEmployeeOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  userId?: Prisma.SortOrderInput | Prisma.SortOrder
   email?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  password?: Prisma.SortOrder
+  password?: Prisma.SortOrderInput | Prisma.SortOrder
   role?: Prisma.SortOrder
   department?: Prisma.SortOrderInput | Prisma.SortOrder
   managerId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.LeaveEmployeeCountOrderByAggregateInput
+  _avg?: Prisma.LeaveEmployeeAvgOrderByAggregateInput
   _max?: Prisma.LeaveEmployeeMaxOrderByAggregateInput
   _min?: Prisma.LeaveEmployeeMinOrderByAggregateInput
+  _sum?: Prisma.LeaveEmployeeSumOrderByAggregateInput
 }
 
 export type LeaveEmployeeScalarWhereWithAggregatesInput = {
@@ -278,9 +328,10 @@ export type LeaveEmployeeScalarWhereWithAggregatesInput = {
   OR?: Prisma.LeaveEmployeeScalarWhereWithAggregatesInput[]
   NOT?: Prisma.LeaveEmployeeScalarWhereWithAggregatesInput | Prisma.LeaveEmployeeScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"LeaveEmployee"> | string
+  userId?: Prisma.IntNullableWithAggregatesFilter<"LeaveEmployee"> | number | null
   email?: Prisma.StringWithAggregatesFilter<"LeaveEmployee"> | string
   name?: Prisma.StringWithAggregatesFilter<"LeaveEmployee"> | string
-  password?: Prisma.StringWithAggregatesFilter<"LeaveEmployee"> | string
+  password?: Prisma.StringNullableWithAggregatesFilter<"LeaveEmployee"> | string | null
   role?: Prisma.EnumLeaveRoleWithAggregatesFilter<"LeaveEmployee"> | $Enums.LeaveRole
   department?: Prisma.StringNullableWithAggregatesFilter<"LeaveEmployee"> | string | null
   managerId?: Prisma.StringNullableWithAggregatesFilter<"LeaveEmployee"> | string | null
@@ -292,11 +343,12 @@ export type LeaveEmployeeCreateInput = {
   id?: string
   email: string
   name: string
-  password: string
+  password?: string | null
   role?: $Enums.LeaveRole
   department?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  user?: Prisma.UserCreateNestedOneWithoutLeaveEmployeeInput
   manager?: Prisma.LeaveEmployeeCreateNestedOneWithoutSubordinatesInput
   subordinates?: Prisma.LeaveEmployeeCreateNestedManyWithoutManagerInput
   leaveBalances?: Prisma.LeaveBalanceCreateNestedManyWithoutEmployeeInput
@@ -306,9 +358,10 @@ export type LeaveEmployeeCreateInput = {
 
 export type LeaveEmployeeUncheckedCreateInput = {
   id?: string
+  userId?: number | null
   email: string
   name: string
-  password: string
+  password?: string | null
   role?: $Enums.LeaveRole
   department?: string | null
   managerId?: string | null
@@ -324,11 +377,12 @@ export type LeaveEmployeeUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumLeaveRoleFieldUpdateOperationsInput | $Enums.LeaveRole
   department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneWithoutLeaveEmployeeNestedInput
   manager?: Prisma.LeaveEmployeeUpdateOneWithoutSubordinatesNestedInput
   subordinates?: Prisma.LeaveEmployeeUpdateManyWithoutManagerNestedInput
   leaveBalances?: Prisma.LeaveBalanceUpdateManyWithoutEmployeeNestedInput
@@ -338,9 +392,10 @@ export type LeaveEmployeeUpdateInput = {
 
 export type LeaveEmployeeUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   email?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumLeaveRoleFieldUpdateOperationsInput | $Enums.LeaveRole
   department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   managerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -354,9 +409,10 @@ export type LeaveEmployeeUncheckedUpdateInput = {
 
 export type LeaveEmployeeCreateManyInput = {
   id?: string
+  userId?: number | null
   email: string
   name: string
-  password: string
+  password?: string | null
   role?: $Enums.LeaveRole
   department?: string | null
   managerId?: string | null
@@ -368,7 +424,7 @@ export type LeaveEmployeeUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumLeaveRoleFieldUpdateOperationsInput | $Enums.LeaveRole
   department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -377,9 +433,10 @@ export type LeaveEmployeeUpdateManyMutationInput = {
 
 export type LeaveEmployeeUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   email?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumLeaveRoleFieldUpdateOperationsInput | $Enums.LeaveRole
   department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   managerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -404,6 +461,7 @@ export type LeaveEmployeeOrderByRelationAggregateInput = {
 
 export type LeaveEmployeeCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   email?: Prisma.SortOrder
   name?: Prisma.SortOrder
   password?: Prisma.SortOrder
@@ -414,8 +472,13 @@ export type LeaveEmployeeCountOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
 }
 
+export type LeaveEmployeeAvgOrderByAggregateInput = {
+  userId?: Prisma.SortOrder
+}
+
 export type LeaveEmployeeMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   email?: Prisma.SortOrder
   name?: Prisma.SortOrder
   password?: Prisma.SortOrder
@@ -428,6 +491,7 @@ export type LeaveEmployeeMaxOrderByAggregateInput = {
 
 export type LeaveEmployeeMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   email?: Prisma.SortOrder
   name?: Prisma.SortOrder
   password?: Prisma.SortOrder
@@ -438,9 +502,45 @@ export type LeaveEmployeeMinOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
 }
 
+export type LeaveEmployeeSumOrderByAggregateInput = {
+  userId?: Prisma.SortOrder
+}
+
 export type LeaveEmployeeScalarRelationFilter = {
   is?: Prisma.LeaveEmployeeWhereInput
   isNot?: Prisma.LeaveEmployeeWhereInput
+}
+
+export type LeaveEmployeeCreateNestedOneWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.LeaveEmployeeCreateWithoutUserInput, Prisma.LeaveEmployeeUncheckedCreateWithoutUserInput>
+  connectOrCreate?: Prisma.LeaveEmployeeCreateOrConnectWithoutUserInput
+  connect?: Prisma.LeaveEmployeeWhereUniqueInput
+}
+
+export type LeaveEmployeeUncheckedCreateNestedOneWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.LeaveEmployeeCreateWithoutUserInput, Prisma.LeaveEmployeeUncheckedCreateWithoutUserInput>
+  connectOrCreate?: Prisma.LeaveEmployeeCreateOrConnectWithoutUserInput
+  connect?: Prisma.LeaveEmployeeWhereUniqueInput
+}
+
+export type LeaveEmployeeUpdateOneWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.LeaveEmployeeCreateWithoutUserInput, Prisma.LeaveEmployeeUncheckedCreateWithoutUserInput>
+  connectOrCreate?: Prisma.LeaveEmployeeCreateOrConnectWithoutUserInput
+  upsert?: Prisma.LeaveEmployeeUpsertWithoutUserInput
+  disconnect?: Prisma.LeaveEmployeeWhereInput | boolean
+  delete?: Prisma.LeaveEmployeeWhereInput | boolean
+  connect?: Prisma.LeaveEmployeeWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.LeaveEmployeeUpdateToOneWithWhereWithoutUserInput, Prisma.LeaveEmployeeUpdateWithoutUserInput>, Prisma.LeaveEmployeeUncheckedUpdateWithoutUserInput>
+}
+
+export type LeaveEmployeeUncheckedUpdateOneWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.LeaveEmployeeCreateWithoutUserInput, Prisma.LeaveEmployeeUncheckedCreateWithoutUserInput>
+  connectOrCreate?: Prisma.LeaveEmployeeCreateOrConnectWithoutUserInput
+  upsert?: Prisma.LeaveEmployeeUpsertWithoutUserInput
+  disconnect?: Prisma.LeaveEmployeeWhereInput | boolean
+  delete?: Prisma.LeaveEmployeeWhereInput | boolean
+  connect?: Prisma.LeaveEmployeeWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.LeaveEmployeeUpdateToOneWithWhereWithoutUserInput, Prisma.LeaveEmployeeUpdateWithoutUserInput>, Prisma.LeaveEmployeeUncheckedUpdateWithoutUserInput>
 }
 
 export type LeaveEmployeeCreateNestedOneWithoutSubordinatesInput = {
@@ -547,15 +647,96 @@ export type LeaveEmployeeUpdateOneRequiredWithoutAnnouncementReadsNestedInput = 
   update?: Prisma.XOR<Prisma.XOR<Prisma.LeaveEmployeeUpdateToOneWithWhereWithoutAnnouncementReadsInput, Prisma.LeaveEmployeeUpdateWithoutAnnouncementReadsInput>, Prisma.LeaveEmployeeUncheckedUpdateWithoutAnnouncementReadsInput>
 }
 
-export type LeaveEmployeeCreateWithoutSubordinatesInput = {
+export type LeaveEmployeeCreateWithoutUserInput = {
   id?: string
   email: string
   name: string
-  password: string
+  password?: string | null
   role?: $Enums.LeaveRole
   department?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  manager?: Prisma.LeaveEmployeeCreateNestedOneWithoutSubordinatesInput
+  subordinates?: Prisma.LeaveEmployeeCreateNestedManyWithoutManagerInput
+  leaveBalances?: Prisma.LeaveBalanceCreateNestedManyWithoutEmployeeInput
+  leaveRequests?: Prisma.LeaveRequestCreateNestedManyWithoutEmployeeInput
+  announcementReads?: Prisma.LeaveAnnouncementReadCreateNestedManyWithoutEmployeeInput
+}
+
+export type LeaveEmployeeUncheckedCreateWithoutUserInput = {
+  id?: string
+  email: string
+  name: string
+  password?: string | null
+  role?: $Enums.LeaveRole
+  department?: string | null
+  managerId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  subordinates?: Prisma.LeaveEmployeeUncheckedCreateNestedManyWithoutManagerInput
+  leaveBalances?: Prisma.LeaveBalanceUncheckedCreateNestedManyWithoutEmployeeInput
+  leaveRequests?: Prisma.LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
+  announcementReads?: Prisma.LeaveAnnouncementReadUncheckedCreateNestedManyWithoutEmployeeInput
+}
+
+export type LeaveEmployeeCreateOrConnectWithoutUserInput = {
+  where: Prisma.LeaveEmployeeWhereUniqueInput
+  create: Prisma.XOR<Prisma.LeaveEmployeeCreateWithoutUserInput, Prisma.LeaveEmployeeUncheckedCreateWithoutUserInput>
+}
+
+export type LeaveEmployeeUpsertWithoutUserInput = {
+  update: Prisma.XOR<Prisma.LeaveEmployeeUpdateWithoutUserInput, Prisma.LeaveEmployeeUncheckedUpdateWithoutUserInput>
+  create: Prisma.XOR<Prisma.LeaveEmployeeCreateWithoutUserInput, Prisma.LeaveEmployeeUncheckedCreateWithoutUserInput>
+  where?: Prisma.LeaveEmployeeWhereInput
+}
+
+export type LeaveEmployeeUpdateToOneWithWhereWithoutUserInput = {
+  where?: Prisma.LeaveEmployeeWhereInput
+  data: Prisma.XOR<Prisma.LeaveEmployeeUpdateWithoutUserInput, Prisma.LeaveEmployeeUncheckedUpdateWithoutUserInput>
+}
+
+export type LeaveEmployeeUpdateWithoutUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumLeaveRoleFieldUpdateOperationsInput | $Enums.LeaveRole
+  department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  manager?: Prisma.LeaveEmployeeUpdateOneWithoutSubordinatesNestedInput
+  subordinates?: Prisma.LeaveEmployeeUpdateManyWithoutManagerNestedInput
+  leaveBalances?: Prisma.LeaveBalanceUpdateManyWithoutEmployeeNestedInput
+  leaveRequests?: Prisma.LeaveRequestUpdateManyWithoutEmployeeNestedInput
+  announcementReads?: Prisma.LeaveAnnouncementReadUpdateManyWithoutEmployeeNestedInput
+}
+
+export type LeaveEmployeeUncheckedUpdateWithoutUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumLeaveRoleFieldUpdateOperationsInput | $Enums.LeaveRole
+  department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  managerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subordinates?: Prisma.LeaveEmployeeUncheckedUpdateManyWithoutManagerNestedInput
+  leaveBalances?: Prisma.LeaveBalanceUncheckedUpdateManyWithoutEmployeeNestedInput
+  leaveRequests?: Prisma.LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
+  announcementReads?: Prisma.LeaveAnnouncementReadUncheckedUpdateManyWithoutEmployeeNestedInput
+}
+
+export type LeaveEmployeeCreateWithoutSubordinatesInput = {
+  id?: string
+  email: string
+  name: string
+  password?: string | null
+  role?: $Enums.LeaveRole
+  department?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user?: Prisma.UserCreateNestedOneWithoutLeaveEmployeeInput
   manager?: Prisma.LeaveEmployeeCreateNestedOneWithoutSubordinatesInput
   leaveBalances?: Prisma.LeaveBalanceCreateNestedManyWithoutEmployeeInput
   leaveRequests?: Prisma.LeaveRequestCreateNestedManyWithoutEmployeeInput
@@ -564,9 +745,10 @@ export type LeaveEmployeeCreateWithoutSubordinatesInput = {
 
 export type LeaveEmployeeUncheckedCreateWithoutSubordinatesInput = {
   id?: string
+  userId?: number | null
   email: string
   name: string
-  password: string
+  password?: string | null
   role?: $Enums.LeaveRole
   department?: string | null
   managerId?: string | null
@@ -586,11 +768,12 @@ export type LeaveEmployeeCreateWithoutManagerInput = {
   id?: string
   email: string
   name: string
-  password: string
+  password?: string | null
   role?: $Enums.LeaveRole
   department?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  user?: Prisma.UserCreateNestedOneWithoutLeaveEmployeeInput
   subordinates?: Prisma.LeaveEmployeeCreateNestedManyWithoutManagerInput
   leaveBalances?: Prisma.LeaveBalanceCreateNestedManyWithoutEmployeeInput
   leaveRequests?: Prisma.LeaveRequestCreateNestedManyWithoutEmployeeInput
@@ -599,9 +782,10 @@ export type LeaveEmployeeCreateWithoutManagerInput = {
 
 export type LeaveEmployeeUncheckedCreateWithoutManagerInput = {
   id?: string
+  userId?: number | null
   email: string
   name: string
-  password: string
+  password?: string | null
   role?: $Enums.LeaveRole
   department?: string | null
   createdAt?: Date | string
@@ -637,11 +821,12 @@ export type LeaveEmployeeUpdateWithoutSubordinatesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumLeaveRoleFieldUpdateOperationsInput | $Enums.LeaveRole
   department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneWithoutLeaveEmployeeNestedInput
   manager?: Prisma.LeaveEmployeeUpdateOneWithoutSubordinatesNestedInput
   leaveBalances?: Prisma.LeaveBalanceUpdateManyWithoutEmployeeNestedInput
   leaveRequests?: Prisma.LeaveRequestUpdateManyWithoutEmployeeNestedInput
@@ -650,9 +835,10 @@ export type LeaveEmployeeUpdateWithoutSubordinatesInput = {
 
 export type LeaveEmployeeUncheckedUpdateWithoutSubordinatesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   email?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumLeaveRoleFieldUpdateOperationsInput | $Enums.LeaveRole
   department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   managerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -684,9 +870,10 @@ export type LeaveEmployeeScalarWhereInput = {
   OR?: Prisma.LeaveEmployeeScalarWhereInput[]
   NOT?: Prisma.LeaveEmployeeScalarWhereInput | Prisma.LeaveEmployeeScalarWhereInput[]
   id?: Prisma.StringFilter<"LeaveEmployee"> | string
+  userId?: Prisma.IntNullableFilter<"LeaveEmployee"> | number | null
   email?: Prisma.StringFilter<"LeaveEmployee"> | string
   name?: Prisma.StringFilter<"LeaveEmployee"> | string
-  password?: Prisma.StringFilter<"LeaveEmployee"> | string
+  password?: Prisma.StringNullableFilter<"LeaveEmployee"> | string | null
   role?: Prisma.EnumLeaveRoleFilter<"LeaveEmployee"> | $Enums.LeaveRole
   department?: Prisma.StringNullableFilter<"LeaveEmployee"> | string | null
   managerId?: Prisma.StringNullableFilter<"LeaveEmployee"> | string | null
@@ -698,11 +885,12 @@ export type LeaveEmployeeCreateWithoutLeaveBalancesInput = {
   id?: string
   email: string
   name: string
-  password: string
+  password?: string | null
   role?: $Enums.LeaveRole
   department?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  user?: Prisma.UserCreateNestedOneWithoutLeaveEmployeeInput
   manager?: Prisma.LeaveEmployeeCreateNestedOneWithoutSubordinatesInput
   subordinates?: Prisma.LeaveEmployeeCreateNestedManyWithoutManagerInput
   leaveRequests?: Prisma.LeaveRequestCreateNestedManyWithoutEmployeeInput
@@ -711,9 +899,10 @@ export type LeaveEmployeeCreateWithoutLeaveBalancesInput = {
 
 export type LeaveEmployeeUncheckedCreateWithoutLeaveBalancesInput = {
   id?: string
+  userId?: number | null
   email: string
   name: string
-  password: string
+  password?: string | null
   role?: $Enums.LeaveRole
   department?: string | null
   managerId?: string | null
@@ -744,11 +933,12 @@ export type LeaveEmployeeUpdateWithoutLeaveBalancesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumLeaveRoleFieldUpdateOperationsInput | $Enums.LeaveRole
   department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneWithoutLeaveEmployeeNestedInput
   manager?: Prisma.LeaveEmployeeUpdateOneWithoutSubordinatesNestedInput
   subordinates?: Prisma.LeaveEmployeeUpdateManyWithoutManagerNestedInput
   leaveRequests?: Prisma.LeaveRequestUpdateManyWithoutEmployeeNestedInput
@@ -757,9 +947,10 @@ export type LeaveEmployeeUpdateWithoutLeaveBalancesInput = {
 
 export type LeaveEmployeeUncheckedUpdateWithoutLeaveBalancesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   email?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumLeaveRoleFieldUpdateOperationsInput | $Enums.LeaveRole
   department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   managerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -774,11 +965,12 @@ export type LeaveEmployeeCreateWithoutLeaveRequestsInput = {
   id?: string
   email: string
   name: string
-  password: string
+  password?: string | null
   role?: $Enums.LeaveRole
   department?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  user?: Prisma.UserCreateNestedOneWithoutLeaveEmployeeInput
   manager?: Prisma.LeaveEmployeeCreateNestedOneWithoutSubordinatesInput
   subordinates?: Prisma.LeaveEmployeeCreateNestedManyWithoutManagerInput
   leaveBalances?: Prisma.LeaveBalanceCreateNestedManyWithoutEmployeeInput
@@ -787,9 +979,10 @@ export type LeaveEmployeeCreateWithoutLeaveRequestsInput = {
 
 export type LeaveEmployeeUncheckedCreateWithoutLeaveRequestsInput = {
   id?: string
+  userId?: number | null
   email: string
   name: string
-  password: string
+  password?: string | null
   role?: $Enums.LeaveRole
   department?: string | null
   managerId?: string | null
@@ -820,11 +1013,12 @@ export type LeaveEmployeeUpdateWithoutLeaveRequestsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumLeaveRoleFieldUpdateOperationsInput | $Enums.LeaveRole
   department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneWithoutLeaveEmployeeNestedInput
   manager?: Prisma.LeaveEmployeeUpdateOneWithoutSubordinatesNestedInput
   subordinates?: Prisma.LeaveEmployeeUpdateManyWithoutManagerNestedInput
   leaveBalances?: Prisma.LeaveBalanceUpdateManyWithoutEmployeeNestedInput
@@ -833,9 +1027,10 @@ export type LeaveEmployeeUpdateWithoutLeaveRequestsInput = {
 
 export type LeaveEmployeeUncheckedUpdateWithoutLeaveRequestsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   email?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumLeaveRoleFieldUpdateOperationsInput | $Enums.LeaveRole
   department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   managerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -850,11 +1045,12 @@ export type LeaveEmployeeCreateWithoutAnnouncementReadsInput = {
   id?: string
   email: string
   name: string
-  password: string
+  password?: string | null
   role?: $Enums.LeaveRole
   department?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  user?: Prisma.UserCreateNestedOneWithoutLeaveEmployeeInput
   manager?: Prisma.LeaveEmployeeCreateNestedOneWithoutSubordinatesInput
   subordinates?: Prisma.LeaveEmployeeCreateNestedManyWithoutManagerInput
   leaveBalances?: Prisma.LeaveBalanceCreateNestedManyWithoutEmployeeInput
@@ -863,9 +1059,10 @@ export type LeaveEmployeeCreateWithoutAnnouncementReadsInput = {
 
 export type LeaveEmployeeUncheckedCreateWithoutAnnouncementReadsInput = {
   id?: string
+  userId?: number | null
   email: string
   name: string
-  password: string
+  password?: string | null
   role?: $Enums.LeaveRole
   department?: string | null
   managerId?: string | null
@@ -896,11 +1093,12 @@ export type LeaveEmployeeUpdateWithoutAnnouncementReadsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumLeaveRoleFieldUpdateOperationsInput | $Enums.LeaveRole
   department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneWithoutLeaveEmployeeNestedInput
   manager?: Prisma.LeaveEmployeeUpdateOneWithoutSubordinatesNestedInput
   subordinates?: Prisma.LeaveEmployeeUpdateManyWithoutManagerNestedInput
   leaveBalances?: Prisma.LeaveBalanceUpdateManyWithoutEmployeeNestedInput
@@ -909,9 +1107,10 @@ export type LeaveEmployeeUpdateWithoutAnnouncementReadsInput = {
 
 export type LeaveEmployeeUncheckedUpdateWithoutAnnouncementReadsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   email?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumLeaveRoleFieldUpdateOperationsInput | $Enums.LeaveRole
   department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   managerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -924,9 +1123,10 @@ export type LeaveEmployeeUncheckedUpdateWithoutAnnouncementReadsInput = {
 
 export type LeaveEmployeeCreateManyManagerInput = {
   id?: string
+  userId?: number | null
   email: string
   name: string
-  password: string
+  password?: string | null
   role?: $Enums.LeaveRole
   department?: string | null
   createdAt?: Date | string
@@ -937,11 +1137,12 @@ export type LeaveEmployeeUpdateWithoutManagerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumLeaveRoleFieldUpdateOperationsInput | $Enums.LeaveRole
   department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneWithoutLeaveEmployeeNestedInput
   subordinates?: Prisma.LeaveEmployeeUpdateManyWithoutManagerNestedInput
   leaveBalances?: Prisma.LeaveBalanceUpdateManyWithoutEmployeeNestedInput
   leaveRequests?: Prisma.LeaveRequestUpdateManyWithoutEmployeeNestedInput
@@ -950,9 +1151,10 @@ export type LeaveEmployeeUpdateWithoutManagerInput = {
 
 export type LeaveEmployeeUncheckedUpdateWithoutManagerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   email?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumLeaveRoleFieldUpdateOperationsInput | $Enums.LeaveRole
   department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -965,9 +1167,10 @@ export type LeaveEmployeeUncheckedUpdateWithoutManagerInput = {
 
 export type LeaveEmployeeUncheckedUpdateManyWithoutManagerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   email?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumLeaveRoleFieldUpdateOperationsInput | $Enums.LeaveRole
   department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1034,6 +1237,7 @@ export type LeaveEmployeeCountOutputTypeCountAnnouncementReadsArgs<ExtArgs exten
 
 export type LeaveEmployeeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  userId?: boolean
   email?: boolean
   name?: boolean
   password?: boolean
@@ -1042,6 +1246,7 @@ export type LeaveEmployeeSelect<ExtArgs extends runtime.Types.Extensions.Interna
   managerId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  user?: boolean | Prisma.LeaveEmployee$userArgs<ExtArgs>
   manager?: boolean | Prisma.LeaveEmployee$managerArgs<ExtArgs>
   subordinates?: boolean | Prisma.LeaveEmployee$subordinatesArgs<ExtArgs>
   leaveBalances?: boolean | Prisma.LeaveEmployee$leaveBalancesArgs<ExtArgs>
@@ -1052,6 +1257,7 @@ export type LeaveEmployeeSelect<ExtArgs extends runtime.Types.Extensions.Interna
 
 export type LeaveEmployeeSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  userId?: boolean
   email?: boolean
   name?: boolean
   password?: boolean
@@ -1060,11 +1266,13 @@ export type LeaveEmployeeSelectCreateManyAndReturn<ExtArgs extends runtime.Types
   managerId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  user?: boolean | Prisma.LeaveEmployee$userArgs<ExtArgs>
   manager?: boolean | Prisma.LeaveEmployee$managerArgs<ExtArgs>
 }, ExtArgs["result"]["leaveEmployee"]>
 
 export type LeaveEmployeeSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  userId?: boolean
   email?: boolean
   name?: boolean
   password?: boolean
@@ -1073,11 +1281,13 @@ export type LeaveEmployeeSelectUpdateManyAndReturn<ExtArgs extends runtime.Types
   managerId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  user?: boolean | Prisma.LeaveEmployee$userArgs<ExtArgs>
   manager?: boolean | Prisma.LeaveEmployee$managerArgs<ExtArgs>
 }, ExtArgs["result"]["leaveEmployee"]>
 
 export type LeaveEmployeeSelectScalar = {
   id?: boolean
+  userId?: boolean
   email?: boolean
   name?: boolean
   password?: boolean
@@ -1088,8 +1298,9 @@ export type LeaveEmployeeSelectScalar = {
   updatedAt?: boolean
 }
 
-export type LeaveEmployeeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "name" | "password" | "role" | "department" | "managerId" | "createdAt" | "updatedAt", ExtArgs["result"]["leaveEmployee"]>
+export type LeaveEmployeeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "email" | "name" | "password" | "role" | "department" | "managerId" | "createdAt" | "updatedAt", ExtArgs["result"]["leaveEmployee"]>
 export type LeaveEmployeeInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  user?: boolean | Prisma.LeaveEmployee$userArgs<ExtArgs>
   manager?: boolean | Prisma.LeaveEmployee$managerArgs<ExtArgs>
   subordinates?: boolean | Prisma.LeaveEmployee$subordinatesArgs<ExtArgs>
   leaveBalances?: boolean | Prisma.LeaveEmployee$leaveBalancesArgs<ExtArgs>
@@ -1098,15 +1309,18 @@ export type LeaveEmployeeInclude<ExtArgs extends runtime.Types.Extensions.Intern
   _count?: boolean | Prisma.LeaveEmployeeCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type LeaveEmployeeIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  user?: boolean | Prisma.LeaveEmployee$userArgs<ExtArgs>
   manager?: boolean | Prisma.LeaveEmployee$managerArgs<ExtArgs>
 }
 export type LeaveEmployeeIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  user?: boolean | Prisma.LeaveEmployee$userArgs<ExtArgs>
   manager?: boolean | Prisma.LeaveEmployee$managerArgs<ExtArgs>
 }
 
 export type $LeaveEmployeePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "LeaveEmployee"
   objects: {
+    user: Prisma.$UserPayload<ExtArgs> | null
     manager: Prisma.$LeaveEmployeePayload<ExtArgs> | null
     subordinates: Prisma.$LeaveEmployeePayload<ExtArgs>[]
     leaveBalances: Prisma.$LeaveBalancePayload<ExtArgs>[]
@@ -1115,9 +1329,10 @@ export type $LeaveEmployeePayload<ExtArgs extends runtime.Types.Extensions.Inter
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
+    userId: number | null
     email: string
     name: string
-    password: string
+    password: string | null
     role: $Enums.LeaveRole
     department: string | null
     managerId: string | null
@@ -1517,6 +1732,7 @@ readonly fields: LeaveEmployeeFieldRefs;
  */
 export interface Prisma__LeaveEmployeeClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  user<T extends Prisma.LeaveEmployee$userArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LeaveEmployee$userArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   manager<T extends Prisma.LeaveEmployee$managerArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LeaveEmployee$managerArgs<ExtArgs>>): Prisma.Prisma__LeaveEmployeeClient<runtime.Types.Result.GetResult<Prisma.$LeaveEmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   subordinates<T extends Prisma.LeaveEmployee$subordinatesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LeaveEmployee$subordinatesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LeaveEmployeePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   leaveBalances<T extends Prisma.LeaveEmployee$leaveBalancesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LeaveEmployee$leaveBalancesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LeaveBalancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -1552,6 +1768,7 @@ export interface Prisma__LeaveEmployeeClient<T, Null = never, ExtArgs extends ru
  */
 export interface LeaveEmployeeFieldRefs {
   readonly id: Prisma.FieldRef<"LeaveEmployee", 'String'>
+  readonly userId: Prisma.FieldRef<"LeaveEmployee", 'Int'>
   readonly email: Prisma.FieldRef<"LeaveEmployee", 'String'>
   readonly name: Prisma.FieldRef<"LeaveEmployee", 'String'>
   readonly password: Prisma.FieldRef<"LeaveEmployee", 'String'>
@@ -1958,6 +2175,25 @@ export type LeaveEmployeeDeleteManyArgs<ExtArgs extends runtime.Types.Extensions
    * Limit how many LeaveEmployees to delete.
    */
   limit?: number
+}
+
+/**
+ * LeaveEmployee.user
+ */
+export type LeaveEmployee$userArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
 }
 
 /**

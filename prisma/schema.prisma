@@ -21,6 +21,7 @@ model User {
   replies        TicketReply[]
   projectMembers ProjectMember[]
   notifications  Notification[]
+  leaveEmployee  LeaveEmployee?
 
   @@map("users")
 }
@@ -255,9 +256,11 @@ enum LeaveRequestStatus {
 
 model LeaveEmployee {
   id                String                  @id @default(cuid())
+  userId            Int?                    @unique
+  user              User?                   @relation(fields: [userId], references: [id], onDelete: SetNull)
   email             String                  @unique
   name              String
-  password          String
+  password          String?
   role              LeaveRole               @default(EMPLOYEE)
   department        String?
   managerId         String?

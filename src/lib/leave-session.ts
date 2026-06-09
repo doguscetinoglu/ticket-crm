@@ -1,6 +1,6 @@
-import { SignJWT, jwtVerify } from "jose";
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { getSession } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 
 export interface LeaveSessionUser {
   id: string;
@@ -9,37 +9,35 @@ export interface LeaveSessionUser {
   role: "EMPLOYEE" | "MANAGER" | "HR_ADMIN";
 }
 
-export const LEAVE_COOKIE = "lp_session";
-
-const SECRET = new TextEncoder().encode(
-  process.env.LEAVE_JWT_SECRET ?? process.env.JWT_SECRET ?? "leave-portal-secret-key-32chars!!"
-);
-
-export async function signLeaveToken(user: LeaveSessionUser): Promise<string> {
-  return new SignJWT(user as unknown as Record<string, unknown>)
-    .setProtectedHeader({ alg: "HS256" })
-    .setExpirationTime("7d")
-    .sign(SECRET);
-}
-
-export async function verifyLeaveToken(token: string): Promise<LeaveSessionUser | null> {
-  try {
-    const { payload } = await jwtVerify(token, SECRET);
-    return payload as unknown as LeaveSessionUser;
-  } catch {
-    return null;
-  }
-}
-
 export async function getLeaveSession(): Promise<LeaveSessionUser | null> {
-  const store = await cookies();
-  const token = store.get(LEAVE_COOKIE)?.value;
-  if (!token) return null;
-  return verifyLeaveToken(token);
+  const ticketUser = await getSession();
+  if (!ticketUser || ticketUser.type === "customer") return null;
+
+  let employee = await prisma.leaveEmployee.findUnique({
+    where: { userId: ticketUser.id },
+  });
+
+  if (!employee) {
+    employee = await prisma.leaveEmployee.create({
+      data: {
+        userId: ticketUser.id,
+        email: ticketUser.email,
+        name: ticketUser.name,
+        role: ticketUser.isAdmin ? "HR_ADMIN" : "EMPLOYEE",
+      },
+    });
+  }
+
+  return {
+    id: employee.id,
+    email: employee.email,
+    name: employee.name,
+    role: employee.role,
+  };
 }
 
 export async function requireLeaveSession(): Promise<LeaveSessionUser> {
   const s = await getLeaveSession();
-  if (!s) redirect("/izin-portal/login");
+  if (!s) redirect("/login");
   return s;
 }
