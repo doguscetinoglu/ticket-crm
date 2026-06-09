@@ -4,7 +4,6 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { format } from "date-fns";
 import { tr } from "date-fns/locale";
-import { Navbar } from "@/components/izin-portal/navbar";
 import { StatusBadge, leaveTypeLabel } from "@/components/izin-portal/status-badge";
 import { ApproveRejectButtons } from "@/components/izin-portal/approve-reject-buttons";
 import { CancelLeaveButton } from "@/components/izin-portal/cancel-leave-button";
@@ -30,7 +29,6 @@ export default async function LeaveDetailPage({ params }: { params: Promise<{ id
 
   return (
     <div className="min-h-screen" style={{ background: "var(--bg)" }}>
-      <Navbar user={session} />
       <main className="max-w-3xl mx-auto px-4 sm:px-6 py-8 space-y-6">
         <div className="flex items-center gap-3">
           <Link href="/izin-portal/dashboard" className="text-sm" style={{ color: "var(--text-secondary)" }}>← Geri</Link>

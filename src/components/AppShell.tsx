@@ -12,8 +12,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   if (
     path === "/login" ||
     path === "/portal" ||
-    path.startsWith("/anket/") ||
-    path.startsWith("/izin-portal")
+    path.startsWith("/anket/")
   ) return <>{children}</>;
 
   return (

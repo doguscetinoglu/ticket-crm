@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Navbar } from "@/components/izin-portal/navbar";
 import { useLeaveSession } from "@/components/izin-portal/use-leave-session";
 
 const LEAVE_TYPES = [
@@ -50,7 +49,6 @@ export default function NewLeavePage() {
 
   return (
     <div className="min-h-screen" style={{ background: "var(--bg)" }}>
-      <Navbar user={user} />
       <main className="max-w-2xl mx-auto px-4 sm:px-6 py-8">
         <div className="mb-6 fade-up">
           <h1 className="text-2xl font-bold" style={{ color: "var(--text)" }}>Yeni İzin Talebi</h1>

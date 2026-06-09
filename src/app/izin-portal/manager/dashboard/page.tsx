@@ -4,7 +4,6 @@ import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { format } from "date-fns";
 import { tr } from "date-fns/locale";
-import { Navbar } from "@/components/izin-portal/navbar";
 import { StatusBadge, leaveTypeLabel } from "@/components/izin-portal/status-badge";
 import { ApproveRejectButtons } from "@/components/izin-portal/approve-reject-buttons";
 
@@ -33,7 +32,6 @@ export default async function ManagerDashboardPage() {
 
   return (
     <div className="min-h-screen" style={{ background: "var(--bg)" }}>
-      <Navbar user={session} />
       <main className="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-6">
         <div className="fade-up">
           <h1 className="text-2xl font-bold" style={{ color: "var(--text)" }}>Onay Bekleyenler</h1>

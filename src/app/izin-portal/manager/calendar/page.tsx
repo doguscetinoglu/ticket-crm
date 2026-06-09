@@ -3,7 +3,6 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, getDay } from "date-fns";
 import { tr } from "date-fns/locale";
-import { Navbar } from "@/components/izin-portal/navbar";
 import { leaveTypeLabel } from "@/components/izin-portal/status-badge";
 
 export default async function ManagerCalendarPage() {
@@ -39,7 +38,6 @@ export default async function ManagerCalendarPage() {
 
   return (
     <div className="min-h-screen" style={{ background: "var(--bg)" }}>
-      <Navbar user={session} />
       <main className="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-6">
         <div className="fade-up">
           <h1 className="text-2xl font-bold" style={{ color: "var(--text)" }}>

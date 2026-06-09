@@ -3,7 +3,6 @@ import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { format } from "date-fns";
 import { tr } from "date-fns/locale";
-import { Navbar } from "@/components/izin-portal/navbar";
 import { StatusBadge, leaveTypeLabel } from "@/components/izin-portal/status-badge";
 import { AnnouncementConfirmModal } from "@/components/izin-portal/announcement-confirm-modal";
 
@@ -45,7 +44,6 @@ export default async function DashboardPage() {
       {requiresConfirmation.length > 0 && (
         <AnnouncementConfirmModal announcements={requiresConfirmation.map((a) => ({ id: a.id, title: a.title, content: a.content }))} />
       )}
-      <Navbar user={session} />
       <main className="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-8">
         <div className="fade-up">
           <h1 className="text-2xl font-bold" style={{ color: "var(--text)" }}>
