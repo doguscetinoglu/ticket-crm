@@ -92,33 +92,3 @@ export type ProjectLog = Prisma.ProjectLogModel
  * 
  */
 export type ProjectMessage = Prisma.ProjectMessageModel
-/**
- * Model LeaveEmployee
- * 
- */
-export type LeaveEmployee = Prisma.LeaveEmployeeModel
-/**
- * Model LeaveBalance
- * 
- */
-export type LeaveBalance = Prisma.LeaveBalanceModel
-/**
- * Model LeaveRequest
- * 
- */
-export type LeaveRequest = Prisma.LeaveRequestModel
-/**
- * Model LeaveStatusHistory
- * 
- */
-export type LeaveStatusHistory = Prisma.LeaveStatusHistoryModel
-/**
- * Model LeaveAnnouncement
- * 
- */
-export type LeaveAnnouncement = Prisma.LeaveAnnouncementModel
-/**
- * Model LeaveAnnouncementRead
- * 
- */
-export type LeaveAnnouncementRead = Prisma.LeaveAnnouncementReadModel

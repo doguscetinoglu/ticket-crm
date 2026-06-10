@@ -252,7 +252,6 @@ export type UserWhereInput = {
   replies?: Prisma.TicketReplyListRelationFilter
   projectMembers?: Prisma.ProjectMemberListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
-  leaveEmployee?: Prisma.XOR<Prisma.LeaveEmployeeNullableScalarRelationFilter, Prisma.LeaveEmployeeWhereInput> | null
 }
 
 export type UserOrderByWithRelationInput = {
@@ -269,7 +268,6 @@ export type UserOrderByWithRelationInput = {
   replies?: Prisma.TicketReplyOrderByRelationAggregateInput
   projectMembers?: Prisma.ProjectMemberOrderByRelationAggregateInput
   notifications?: Prisma.NotificationOrderByRelationAggregateInput
-  leaveEmployee?: Prisma.LeaveEmployeeOrderByWithRelationInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -289,7 +287,6 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   replies?: Prisma.TicketReplyListRelationFilter
   projectMembers?: Prisma.ProjectMemberListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
-  leaveEmployee?: Prisma.XOR<Prisma.LeaveEmployeeNullableScalarRelationFilter, Prisma.LeaveEmployeeWhereInput> | null
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -337,7 +334,6 @@ export type UserCreateInput = {
   replies?: Prisma.TicketReplyCreateNestedManyWithoutUserInput
   projectMembers?: Prisma.ProjectMemberCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
-  leaveEmployee?: Prisma.LeaveEmployeeCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -354,7 +350,6 @@ export type UserUncheckedCreateInput = {
   replies?: Prisma.TicketReplyUncheckedCreateNestedManyWithoutUserInput
   projectMembers?: Prisma.ProjectMemberUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
-  leaveEmployee?: Prisma.LeaveEmployeeUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -370,7 +365,6 @@ export type UserUpdateInput = {
   replies?: Prisma.TicketReplyUpdateManyWithoutUserNestedInput
   projectMembers?: Prisma.ProjectMemberUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
-  leaveEmployee?: Prisma.LeaveEmployeeUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -387,7 +381,6 @@ export type UserUncheckedUpdateInput = {
   replies?: Prisma.TicketReplyUncheckedUpdateManyWithoutUserNestedInput
   projectMembers?: Prisma.ProjectMemberUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
-  leaveEmployee?: Prisma.LeaveEmployeeUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -559,22 +552,6 @@ export type UserUpdateOneRequiredWithoutProjectMembersNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutProjectMembersInput, Prisma.UserUpdateWithoutProjectMembersInput>, Prisma.UserUncheckedUpdateWithoutProjectMembersInput>
 }
 
-export type UserCreateNestedOneWithoutLeaveEmployeeInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutLeaveEmployeeInput, Prisma.UserUncheckedCreateWithoutLeaveEmployeeInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutLeaveEmployeeInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserUpdateOneWithoutLeaveEmployeeNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutLeaveEmployeeInput, Prisma.UserUncheckedCreateWithoutLeaveEmployeeInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutLeaveEmployeeInput
-  upsert?: Prisma.UserUpsertWithoutLeaveEmployeeInput
-  disconnect?: Prisma.UserWhereInput | boolean
-  delete?: Prisma.UserWhereInput | boolean
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutLeaveEmployeeInput, Prisma.UserUpdateWithoutLeaveEmployeeInput>, Prisma.UserUncheckedUpdateWithoutLeaveEmployeeInput>
-}
-
 export type UserCreateWithoutNotificationsInput = {
   name: string
   email: string
@@ -587,7 +564,6 @@ export type UserCreateWithoutNotificationsInput = {
   tickets?: Prisma.TicketCreateNestedManyWithoutAssigneeInput
   replies?: Prisma.TicketReplyCreateNestedManyWithoutUserInput
   projectMembers?: Prisma.ProjectMemberCreateNestedManyWithoutUserInput
-  leaveEmployee?: Prisma.LeaveEmployeeCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -603,7 +579,6 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   tickets?: Prisma.TicketUncheckedCreateNestedManyWithoutAssigneeInput
   replies?: Prisma.TicketReplyUncheckedCreateNestedManyWithoutUserInput
   projectMembers?: Prisma.ProjectMemberUncheckedCreateNestedManyWithoutUserInput
-  leaveEmployee?: Prisma.LeaveEmployeeUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -634,7 +609,6 @@ export type UserUpdateWithoutNotificationsInput = {
   tickets?: Prisma.TicketUpdateManyWithoutAssigneeNestedInput
   replies?: Prisma.TicketReplyUpdateManyWithoutUserNestedInput
   projectMembers?: Prisma.ProjectMemberUpdateManyWithoutUserNestedInput
-  leaveEmployee?: Prisma.LeaveEmployeeUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -650,7 +624,6 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   tickets?: Prisma.TicketUncheckedUpdateManyWithoutAssigneeNestedInput
   replies?: Prisma.TicketReplyUncheckedUpdateManyWithoutUserNestedInput
   projectMembers?: Prisma.ProjectMemberUncheckedUpdateManyWithoutUserNestedInput
-  leaveEmployee?: Prisma.LeaveEmployeeUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateWithoutTicketsInput = {
@@ -665,7 +638,6 @@ export type UserCreateWithoutTicketsInput = {
   replies?: Prisma.TicketReplyCreateNestedManyWithoutUserInput
   projectMembers?: Prisma.ProjectMemberCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
-  leaveEmployee?: Prisma.LeaveEmployeeCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutTicketsInput = {
@@ -681,7 +653,6 @@ export type UserUncheckedCreateWithoutTicketsInput = {
   replies?: Prisma.TicketReplyUncheckedCreateNestedManyWithoutUserInput
   projectMembers?: Prisma.ProjectMemberUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
-  leaveEmployee?: Prisma.LeaveEmployeeUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutTicketsInput = {
@@ -712,7 +683,6 @@ export type UserUpdateWithoutTicketsInput = {
   replies?: Prisma.TicketReplyUpdateManyWithoutUserNestedInput
   projectMembers?: Prisma.ProjectMemberUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
-  leaveEmployee?: Prisma.LeaveEmployeeUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTicketsInput = {
@@ -728,7 +698,6 @@ export type UserUncheckedUpdateWithoutTicketsInput = {
   replies?: Prisma.TicketReplyUncheckedUpdateManyWithoutUserNestedInput
   projectMembers?: Prisma.ProjectMemberUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
-  leaveEmployee?: Prisma.LeaveEmployeeUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateWithoutRepliesInput = {
@@ -743,7 +712,6 @@ export type UserCreateWithoutRepliesInput = {
   tickets?: Prisma.TicketCreateNestedManyWithoutAssigneeInput
   projectMembers?: Prisma.ProjectMemberCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
-  leaveEmployee?: Prisma.LeaveEmployeeCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutRepliesInput = {
@@ -759,7 +727,6 @@ export type UserUncheckedCreateWithoutRepliesInput = {
   tickets?: Prisma.TicketUncheckedCreateNestedManyWithoutAssigneeInput
   projectMembers?: Prisma.ProjectMemberUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
-  leaveEmployee?: Prisma.LeaveEmployeeUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutRepliesInput = {
@@ -790,7 +757,6 @@ export type UserUpdateWithoutRepliesInput = {
   tickets?: Prisma.TicketUpdateManyWithoutAssigneeNestedInput
   projectMembers?: Prisma.ProjectMemberUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
-  leaveEmployee?: Prisma.LeaveEmployeeUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutRepliesInput = {
@@ -806,7 +772,6 @@ export type UserUncheckedUpdateWithoutRepliesInput = {
   tickets?: Prisma.TicketUncheckedUpdateManyWithoutAssigneeNestedInput
   projectMembers?: Prisma.ProjectMemberUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
-  leaveEmployee?: Prisma.LeaveEmployeeUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateWithoutProjectMembersInput = {
@@ -821,7 +786,6 @@ export type UserCreateWithoutProjectMembersInput = {
   tickets?: Prisma.TicketCreateNestedManyWithoutAssigneeInput
   replies?: Prisma.TicketReplyCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
-  leaveEmployee?: Prisma.LeaveEmployeeCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutProjectMembersInput = {
@@ -837,7 +801,6 @@ export type UserUncheckedCreateWithoutProjectMembersInput = {
   tickets?: Prisma.TicketUncheckedCreateNestedManyWithoutAssigneeInput
   replies?: Prisma.TicketReplyUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
-  leaveEmployee?: Prisma.LeaveEmployeeUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutProjectMembersInput = {
@@ -868,7 +831,6 @@ export type UserUpdateWithoutProjectMembersInput = {
   tickets?: Prisma.TicketUpdateManyWithoutAssigneeNestedInput
   replies?: Prisma.TicketReplyUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
-  leaveEmployee?: Prisma.LeaveEmployeeUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutProjectMembersInput = {
@@ -883,85 +845,6 @@ export type UserUncheckedUpdateWithoutProjectMembersInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tickets?: Prisma.TicketUncheckedUpdateManyWithoutAssigneeNestedInput
   replies?: Prisma.TicketReplyUncheckedUpdateManyWithoutUserNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
-  leaveEmployee?: Prisma.LeaveEmployeeUncheckedUpdateOneWithoutUserNestedInput
-}
-
-export type UserCreateWithoutLeaveEmployeeInput = {
-  name: string
-  email: string
-  password: string
-  isAdmin?: boolean
-  role?: string
-  color?: string
-  isActive?: boolean
-  createdAt?: Date | string
-  tickets?: Prisma.TicketCreateNestedManyWithoutAssigneeInput
-  replies?: Prisma.TicketReplyCreateNestedManyWithoutUserInput
-  projectMembers?: Prisma.ProjectMemberCreateNestedManyWithoutUserInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
-}
-
-export type UserUncheckedCreateWithoutLeaveEmployeeInput = {
-  id?: number
-  name: string
-  email: string
-  password: string
-  isAdmin?: boolean
-  role?: string
-  color?: string
-  isActive?: boolean
-  createdAt?: Date | string
-  tickets?: Prisma.TicketUncheckedCreateNestedManyWithoutAssigneeInput
-  replies?: Prisma.TicketReplyUncheckedCreateNestedManyWithoutUserInput
-  projectMembers?: Prisma.ProjectMemberUncheckedCreateNestedManyWithoutUserInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
-}
-
-export type UserCreateOrConnectWithoutLeaveEmployeeInput = {
-  where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutLeaveEmployeeInput, Prisma.UserUncheckedCreateWithoutLeaveEmployeeInput>
-}
-
-export type UserUpsertWithoutLeaveEmployeeInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutLeaveEmployeeInput, Prisma.UserUncheckedUpdateWithoutLeaveEmployeeInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutLeaveEmployeeInput, Prisma.UserUncheckedCreateWithoutLeaveEmployeeInput>
-  where?: Prisma.UserWhereInput
-}
-
-export type UserUpdateToOneWithWhereWithoutLeaveEmployeeInput = {
-  where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutLeaveEmployeeInput, Prisma.UserUncheckedUpdateWithoutLeaveEmployeeInput>
-}
-
-export type UserUpdateWithoutLeaveEmployeeInput = {
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
-  isAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  role?: Prisma.StringFieldUpdateOperationsInput | string
-  color?: Prisma.StringFieldUpdateOperationsInput | string
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tickets?: Prisma.TicketUpdateManyWithoutAssigneeNestedInput
-  replies?: Prisma.TicketReplyUpdateManyWithoutUserNestedInput
-  projectMembers?: Prisma.ProjectMemberUpdateManyWithoutUserNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
-}
-
-export type UserUncheckedUpdateWithoutLeaveEmployeeInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
-  isAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  role?: Prisma.StringFieldUpdateOperationsInput | string
-  color?: Prisma.StringFieldUpdateOperationsInput | string
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tickets?: Prisma.TicketUncheckedUpdateManyWithoutAssigneeNestedInput
-  replies?: Prisma.TicketReplyUncheckedUpdateManyWithoutUserNestedInput
-  projectMembers?: Prisma.ProjectMemberUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -1037,7 +920,6 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   replies?: boolean | Prisma.User$repliesArgs<ExtArgs>
   projectMembers?: boolean | Prisma.User$projectMembersArgs<ExtArgs>
   notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
-  leaveEmployee?: boolean | Prisma.User$leaveEmployeeArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1083,7 +965,6 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   replies?: boolean | Prisma.User$repliesArgs<ExtArgs>
   projectMembers?: boolean | Prisma.User$projectMembersArgs<ExtArgs>
   notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
-  leaveEmployee?: boolean | Prisma.User$leaveEmployeeArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1096,7 +977,6 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     replies: Prisma.$TicketReplyPayload<ExtArgs>[]
     projectMembers: Prisma.$ProjectMemberPayload<ExtArgs>[]
     notifications: Prisma.$NotificationPayload<ExtArgs>[]
-    leaveEmployee: Prisma.$LeaveEmployeePayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1506,7 +1386,6 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   replies<T extends Prisma.User$repliesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$repliesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TicketReplyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   projectMembers<T extends Prisma.User$projectMembersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$projectMembersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProjectMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   notifications<T extends Prisma.User$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  leaveEmployee<T extends Prisma.User$leaveEmployeeArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$leaveEmployeeArgs<ExtArgs>>): Prisma.Prisma__LeaveEmployeeClient<runtime.Types.Result.GetResult<Prisma.$LeaveEmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2031,25 +1910,6 @@ export type User$notificationsArgs<ExtArgs extends runtime.Types.Extensions.Inte
   take?: number
   skip?: number
   distinct?: Prisma.NotificationScalarFieldEnum | Prisma.NotificationScalarFieldEnum[]
-}
-
-/**
- * User.leaveEmployee
- */
-export type User$leaveEmployeeArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the LeaveEmployee
-   */
-  select?: Prisma.LeaveEmployeeSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the LeaveEmployee
-   */
-  omit?: Prisma.LeaveEmployeeOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.LeaveEmployeeInclude<ExtArgs> | null
-  where?: Prisma.LeaveEmployeeWhereInput
 }
 
 /**

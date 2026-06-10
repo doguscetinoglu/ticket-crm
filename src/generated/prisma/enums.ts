@@ -9,32 +9,7 @@
 * 🟢 You can import this file directly.
 */
 
-export const LeaveRole = {
-  EMPLOYEE: 'EMPLOYEE',
-  MANAGER: 'MANAGER',
-  HR_ADMIN: 'HR_ADMIN'
-} as const
-
-export type LeaveRole = (typeof LeaveRole)[keyof typeof LeaveRole]
 
 
-export const LeaveType = {
-  ANNUAL: 'ANNUAL',
-  SICK: 'SICK',
-  ADMINISTRATIVE: 'ADMINISTRATIVE',
-  MATERNITY: 'MATERNITY',
-  OTHER: 'OTHER'
-} as const
-
-export type LeaveType = (typeof LeaveType)[keyof typeof LeaveType]
-
-
-export const LeaveRequestStatus = {
-  PENDING: 'PENDING',
-  IN_REVIEW: 'IN_REVIEW',
-  APPROVED: 'APPROVED',
-  REJECTED: 'REJECTED',
-  CANCELLED: 'CANCELLED'
-} as const
-
-export type LeaveRequestStatus = (typeof LeaveRequestStatus)[keyof typeof LeaveRequestStatus]
+// This file is empty because there are no enums in the schema.
+export {}

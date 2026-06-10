@@ -65,13 +65,7 @@ export const ModelName = {
   ProjectStep: 'ProjectStep',
   ProjectTask: 'ProjectTask',
   ProjectLog: 'ProjectLog',
-  ProjectMessage: 'ProjectMessage',
-  LeaveEmployee: 'LeaveEmployee',
-  LeaveBalance: 'LeaveBalance',
-  LeaveRequest: 'LeaveRequest',
-  LeaveStatusHistory: 'LeaveStatusHistory',
-  LeaveAnnouncement: 'LeaveAnnouncement',
-  LeaveAnnouncementRead: 'LeaveAnnouncementRead'
+  ProjectMessage: 'ProjectMessage'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -291,88 +285,6 @@ export const ProjectMessageScalarFieldEnum = {
 } as const
 
 export type ProjectMessageScalarFieldEnum = (typeof ProjectMessageScalarFieldEnum)[keyof typeof ProjectMessageScalarFieldEnum]
-
-
-export const LeaveEmployeeScalarFieldEnum = {
-  id: 'id',
-  userId: 'userId',
-  email: 'email',
-  name: 'name',
-  password: 'password',
-  role: 'role',
-  department: 'department',
-  managerId: 'managerId',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type LeaveEmployeeScalarFieldEnum = (typeof LeaveEmployeeScalarFieldEnum)[keyof typeof LeaveEmployeeScalarFieldEnum]
-
-
-export const LeaveBalanceScalarFieldEnum = {
-  id: 'id',
-  employeeId: 'employeeId',
-  year: 'year',
-  leaveType: 'leaveType',
-  totalDays: 'totalDays',
-  usedDays: 'usedDays'
-} as const
-
-export type LeaveBalanceScalarFieldEnum = (typeof LeaveBalanceScalarFieldEnum)[keyof typeof LeaveBalanceScalarFieldEnum]
-
-
-export const LeaveRequestScalarFieldEnum = {
-  id: 'id',
-  employeeId: 'employeeId',
-  leaveType: 'leaveType',
-  startDate: 'startDate',
-  endDate: 'endDate',
-  days: 'days',
-  address: 'address',
-  handoverPersonId: 'handoverPersonId',
-  description: 'description',
-  status: 'status',
-  logoFlowId: 'logoFlowId',
-  logoFlowStatus: 'logoFlowStatus',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type LeaveRequestScalarFieldEnum = (typeof LeaveRequestScalarFieldEnum)[keyof typeof LeaveRequestScalarFieldEnum]
-
-
-export const LeaveStatusHistoryScalarFieldEnum = {
-  id: 'id',
-  leaveRequestId: 'leaveRequestId',
-  status: 'status',
-  note: 'note',
-  changedBy: 'changedBy',
-  createdAt: 'createdAt'
-} as const
-
-export type LeaveStatusHistoryScalarFieldEnum = (typeof LeaveStatusHistoryScalarFieldEnum)[keyof typeof LeaveStatusHistoryScalarFieldEnum]
-
-
-export const LeaveAnnouncementScalarFieldEnum = {
-  id: 'id',
-  title: 'title',
-  content: 'content',
-  isActive: 'isActive',
-  requiresConfirmation: 'requiresConfirmation',
-  createdAt: 'createdAt'
-} as const
-
-export type LeaveAnnouncementScalarFieldEnum = (typeof LeaveAnnouncementScalarFieldEnum)[keyof typeof LeaveAnnouncementScalarFieldEnum]
-
-
-export const LeaveAnnouncementReadScalarFieldEnum = {
-  id: 'id',
-  announcementId: 'announcementId',
-  employeeId: 'employeeId',
-  readAt: 'readAt'
-} as const
-
-export type LeaveAnnouncementReadScalarFieldEnum = (typeof LeaveAnnouncementReadScalarFieldEnum)[keyof typeof LeaveAnnouncementReadScalarFieldEnum]
 
 
 export const SortOrder = {
