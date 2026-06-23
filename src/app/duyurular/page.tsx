@@ -3,7 +3,8 @@
 import { useCallback, useEffect, useState } from "react";
 import type { SessionUser } from "@/lib/session";
 
-interface Read { acknowledged: boolean; readAt: string; user?: { id: number; name: string; color: string }; }
+interface UserLite { id: number; name: string; color: string; }
+interface Read { acknowledged: boolean; readAt: string; user?: UserLite; }
 interface Announcement {
   id: number; title: string; body: string; requireAck: boolean; isActive: boolean; createdAt: string;
   createdBy: { name: string }; reads: Read[];
@@ -16,6 +17,7 @@ const fmtDT = (d: string) => new Date(d).toLocaleString("tr-TR", { day: "2-digit
 export default function DuyurularPage() {
   const [me, setMe] = useState<SessionUser | null>(null);
   const [items, setItems] = useState<Announcement[]>([]);
+  const [users, setUsers] = useState<UserLite[]>([]);
   const [totalUsers, setTotalUsers] = useState(0);
   const [isAdmin, setIsAdmin] = useState(false);
   const [creating, setCreating] = useState(false);
@@ -32,6 +34,7 @@ export default function DuyurularPage() {
     setMe(meRes);
     if (res) {
       setItems(res.announcements ?? []);
+      setUsers(res.users ?? []);
       setTotalUsers(res.totalUsers ?? 0);
       setIsAdmin(!!res.isAdmin);
     }
@@ -57,6 +60,32 @@ export default function DuyurularPage() {
     if (!confirm(`"${a.title}" duyurusunu silmek istediğinize emin misiniz?`)) return;
     await fetch(`/api/duyurular/${a.id}`, { method: "DELETE" });
     load();
+  };
+
+  // Rapor: bir duyuru için kullanıcı bazlı durum (okuyan/onaylayan/görmeyen)
+  const reportRows = (a: Announcement) => {
+    const readMap = new Map(a.reads.map((r) => [r.user?.id, r]));
+    return users.map((u) => {
+      const r = readMap.get(u.id);
+      const status = !r ? "Görmedi" : r.acknowledged ? "Onayladı" : "Görüntüledi";
+      return { user: u, status, readAt: r?.readAt ?? null };
+    });
+  };
+
+  const exportCsv = (a: Announcement) => {
+    const rows = reportRows(a);
+    const header = ["Kullanıcı", "Durum", "Tarih"];
+    const lines = rows.map((x) => [x.user.name, x.status, x.readAt ? fmtDT(x.readAt) : "-"]);
+    const csv = [header, ...lines]
+      .map((cols) => cols.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(";"))
+      .join("\r\n");
+    const blob = new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `duyuru-raporu-${a.id}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
   };
 
   return (
@@ -167,38 +196,82 @@ export default function DuyurularPage() {
               <button onClick={() => setReport(null)} className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-gray-800 text-slate-400">✕</button>
             </div>
             <p className="text-sm text-slate-500 dark:text-gray-400 mb-4">{report.title}</p>
-            <div className="grid grid-cols-3 gap-2 mb-4 text-center">
-              <div className="bg-slate-50 dark:bg-gray-800 rounded-xl py-2">
-                <p className="text-lg font-bold text-slate-700 dark:text-gray-200">{totalUsers}</p>
-                <p className="text-[10px] text-slate-400 dark:text-gray-500 uppercase">Toplam</p>
-              </div>
-              <div className="bg-emerald-50 dark:bg-emerald-500/10 rounded-xl py-2">
-                <p className="text-lg font-bold text-emerald-600 dark:text-emerald-400">{report.reads.length}</p>
-                <p className="text-[10px] text-slate-400 dark:text-gray-500 uppercase">Okudu</p>
-              </div>
-              <div className="bg-amber-50 dark:bg-amber-500/10 rounded-xl py-2">
-                <p className="text-lg font-bold text-amber-600 dark:text-amber-400">{report.reads.filter((r) => r.acknowledged).length}</p>
-                <p className="text-[10px] text-slate-400 dark:text-gray-500 uppercase">Onayladı</p>
-              </div>
-            </div>
-            <p className="text-xs font-semibold text-slate-500 dark:text-gray-500 uppercase mb-2">Okuyanlar</p>
-            {report.reads.length === 0 ? (
-              <p className="text-sm text-slate-400 dark:text-gray-600">Henüz kimse okumadı.</p>
-            ) : (
-              <div className="space-y-1.5">
-                {report.reads.map((r, i) => (
-                  <div key={i} className="flex items-center justify-between text-sm">
-                    <span className="text-slate-700 dark:text-gray-200">{r.user?.name ?? "Kullanıcı"}</span>
-                    <span className="flex items-center gap-2">
-                      {report.requireAck && (
-                        <span className={`text-[11px] px-2 py-0.5 rounded-full font-medium ${r.acknowledged ? "bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300" : "bg-slate-100 dark:bg-gray-800 text-slate-400 dark:text-gray-500"}`}>{r.acknowledged ? "Onayladı" : "Görüntüledi"}</span>
-                      )}
-                      <span className="text-[11px] text-slate-400 dark:text-gray-600">{fmtDT(r.readAt)}</span>
-                    </span>
+
+            {(() => {
+              const rows = reportRows(report);
+              const ackUsers = rows.filter((x) => x.status === "Onayladı");
+              const viewUsers = rows.filter((x) => x.status === "Görüntüledi");
+              const noneUsers = rows.filter((x) => x.status === "Görmedi");
+              const readCount = ackUsers.length + viewUsers.length;
+              const target = report.requireAck ? ackUsers.length : readCount;
+              const pct = totalUsers ? Math.round((target / totalUsers) * 100) : 0;
+
+              const Section = ({ label, list, tone }: { label: string; list: typeof rows; tone: "emerald" | "sky" | "slate" }) => {
+                const dot = tone === "emerald" ? "bg-emerald-500" : tone === "sky" ? "bg-sky-500" : "bg-slate-300 dark:bg-gray-600";
+                return (
+                  <div className="mb-3">
+                    <p className="text-xs font-semibold text-slate-500 dark:text-gray-500 uppercase mb-1.5">{label} <span className="text-slate-400 dark:text-gray-600">· {list.length}</span></p>
+                    {list.length === 0 ? (
+                      <p className="text-xs text-slate-400 dark:text-gray-600">—</p>
+                    ) : (
+                      <div className="space-y-1.5">
+                        {list.map((x) => (
+                          <div key={x.user.id} className="flex items-center justify-between text-sm">
+                            <span className="flex items-center gap-2 text-slate-700 dark:text-gray-200">
+                              <span className={`w-1.5 h-1.5 rounded-full ${dot}`} />{x.user.name}
+                            </span>
+                            <span className="text-[11px] text-slate-400 dark:text-gray-600">{x.readAt ? fmtDT(x.readAt) : "—"}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
-                ))}
-              </div>
-            )}
+                );
+              };
+
+              return (
+                <>
+                  {/* Özet */}
+                  <div className="grid grid-cols-4 gap-2 mb-2 text-center">
+                    <div className="bg-slate-50 dark:bg-gray-800 rounded-xl py-2">
+                      <p className="text-lg font-bold text-slate-700 dark:text-gray-200">{totalUsers}</p>
+                      <p className="text-[10px] text-slate-400 dark:text-gray-500 uppercase">Hedef</p>
+                    </div>
+                    <div className="bg-emerald-50 dark:bg-emerald-500/10 rounded-xl py-2">
+                      <p className="text-lg font-bold text-emerald-600 dark:text-emerald-400">{ackUsers.length}</p>
+                      <p className="text-[10px] text-slate-400 dark:text-gray-500 uppercase">Onayladı</p>
+                    </div>
+                    <div className="bg-sky-50 dark:bg-sky-500/10 rounded-xl py-2">
+                      <p className="text-lg font-bold text-sky-600 dark:text-sky-400">{viewUsers.length}</p>
+                      <p className="text-[10px] text-slate-400 dark:text-gray-500 uppercase">Gördü</p>
+                    </div>
+                    <div className="bg-slate-50 dark:bg-gray-800 rounded-xl py-2">
+                      <p className="text-lg font-bold text-slate-500 dark:text-gray-400">{noneUsers.length}</p>
+                      <p className="text-[10px] text-slate-400 dark:text-gray-500 uppercase">Görmedi</p>
+                    </div>
+                  </div>
+
+                  {/* İlerleme */}
+                  <div className="mb-4">
+                    <div className="flex justify-between text-[11px] text-slate-400 dark:text-gray-500 mb-1">
+                      <span>{report.requireAck ? "Onaylama oranı" : "Okunma oranı"}</span><span>%{pct}</span>
+                    </div>
+                    <div className="h-1.5 bg-slate-100 dark:bg-gray-800 rounded-full overflow-hidden">
+                      <div className="h-full rounded-full bg-indigo-600 transition-all" style={{ width: `${pct}%` }} />
+                    </div>
+                  </div>
+
+                  {report.requireAck && <Section label="Onaylayanlar" list={ackUsers} tone="emerald" />}
+                  <Section label={report.requireAck ? "Gördü (onaylamadı)" : "Görüntüleyenler"} list={viewUsers} tone="sky" />
+                  <Section label="Görmeyenler" list={noneUsers} tone="slate" />
+
+                  <button onClick={() => exportCsv(report)}
+                    className="w-full mt-2 py-2.5 bg-slate-100 dark:bg-gray-800 hover:bg-slate-200 dark:hover:bg-gray-700 text-slate-700 dark:text-gray-200 text-sm font-semibold rounded-xl transition-colors">
+                    ⬇ CSV olarak indir
+                  </button>
+                </>
+              );
+            })()}
           </div>
         </div>
       )}

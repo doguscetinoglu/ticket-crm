@@ -11,7 +11,7 @@ export async function GET() {
   const isAdmin = session.type === "admin";
 
   if (isAdmin) {
-    const [announcements, totalUsers] = await Promise.all([
+    const [announcements, users] = await Promise.all([
       prisma.announcement.findMany({
         orderBy: { createdAt: "desc" },
         select: {
@@ -22,9 +22,14 @@ export async function GET() {
           },
         },
       }),
-      prisma.user.count({ where: { isActive: true } }),
+      // Hedef kitle: aktif kullanıcılar (görmeyenleri hesaplamak için tam liste)
+      prisma.user.findMany({
+        where: { isActive: true },
+        orderBy: { name: "asc" },
+        select: { id: true, name: true, color: true },
+      }),
     ]);
-    return NextResponse.json({ announcements, totalUsers, isAdmin: true });
+    return NextResponse.json({ announcements, users, totalUsers: users.length, isAdmin: true });
   }
 
   // Agent: aktif duyurular + kendi okuma durumu
