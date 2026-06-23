@@ -522,10 +522,6 @@ export type ProjectTaskUncheckedUpdateManyWithoutStepNestedInput = {
   deleteMany?: Prisma.ProjectTaskScalarWhereInput | Prisma.ProjectTaskScalarWhereInput[]
 }
 
-export type NullableDateTimeFieldUpdateOperationsInput = {
-  set?: Date | string | null
-}
-
 export type ProjectTaskCreateWithoutStepInput = {
   title: string
   description?: string | null

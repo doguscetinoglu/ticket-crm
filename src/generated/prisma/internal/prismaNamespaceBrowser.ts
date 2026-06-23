@@ -52,6 +52,9 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   User: 'User',
+  Leave: 'Leave',
+  Announcement: 'Announcement',
+  AnnouncementRead: 'AnnouncementRead',
   Notification: 'Notification',
   Customer: 'Customer',
   Company: 'Company',
@@ -97,6 +100,48 @@ export const UserScalarFieldEnum = {
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const LeaveScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  type: 'type',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  days: 'days',
+  reason: 'reason',
+  status: 'status',
+  reviewedById: 'reviewedById',
+  reviewedAt: 'reviewedAt',
+  reviewNote: 'reviewNote',
+  createdAt: 'createdAt'
+} as const
+
+export type LeaveScalarFieldEnum = (typeof LeaveScalarFieldEnum)[keyof typeof LeaveScalarFieldEnum]
+
+
+export const AnnouncementScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  body: 'body',
+  createdById: 'createdById',
+  requireAck: 'requireAck',
+  isActive: 'isActive',
+  createdAt: 'createdAt'
+} as const
+
+export type AnnouncementScalarFieldEnum = (typeof AnnouncementScalarFieldEnum)[keyof typeof AnnouncementScalarFieldEnum]
+
+
+export const AnnouncementReadScalarFieldEnum = {
+  id: 'id',
+  announcementId: 'announcementId',
+  userId: 'userId',
+  acknowledged: 'acknowledged',
+  readAt: 'readAt'
+} as const
+
+export type AnnouncementReadScalarFieldEnum = (typeof AnnouncementReadScalarFieldEnum)[keyof typeof AnnouncementReadScalarFieldEnum]
 
 
 export const NotificationScalarFieldEnum = {

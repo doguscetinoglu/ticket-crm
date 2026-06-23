@@ -21,7 +21,59 @@ model User {
   replies        TicketReply[]
   projectMembers ProjectMember[]
   notifications  Notification[]
+  leaves            Leave[]            @relation("LeaveUser")
+  reviewedLeaves    Leave[]            @relation("LeaveReviewer")
+  announcements     Announcement[]     @relation("AnnouncementAuthor")
+  announcementReads AnnouncementRead[]
   @@map("users")
+}
+
+model Leave {
+  id           Int       @id @default(autoincrement())
+  userId       Int
+  user         User      @relation("LeaveUser", fields: [userId], references: [id], onDelete: Cascade)
+  type         String    @default("Yıllık İzin")
+  startDate    DateTime
+  endDate      DateTime
+  days         Float     @default(1)
+  reason       String?
+  status       String    @default("Beklemede")
+  reviewedById Int?
+  reviewedBy   User?     @relation("LeaveReviewer", fields: [reviewedById], references: [id])
+  reviewedAt   DateTime?
+  reviewNote   String?
+  createdAt    DateTime  @default(now())
+
+  @@index([userId])
+  @@index([status])
+  @@map("leaves")
+}
+
+model Announcement {
+  id          Int                @id @default(autoincrement())
+  title       String
+  body        String
+  createdById Int
+  createdBy   User               @relation("AnnouncementAuthor", fields: [createdById], references: [id])
+  requireAck  Boolean            @default(false)
+  isActive    Boolean            @default(true)
+  createdAt   DateTime           @default(now())
+  reads       AnnouncementRead[]
+
+  @@map("announcements")
+}
+
+model AnnouncementRead {
+  id             Int          @id @default(autoincrement())
+  announcementId Int
+  announcement   Announcement @relation(fields: [announcementId], references: [id], onDelete: Cascade)
+  userId         Int
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  acknowledged   Boolean      @default(false)
+  readAt         DateTime     @default(now())
+
+  @@unique([announcementId, userId])
+  @@map("announcement_reads")
 }
 
 model Notification {

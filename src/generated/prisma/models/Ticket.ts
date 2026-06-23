@@ -767,14 +767,6 @@ export type TicketUncheckedUpdateManyWithoutCustomerNestedInput = {
   deleteMany?: Prisma.TicketScalarWhereInput | Prisma.TicketScalarWhereInput[]
 }
 
-export type NullableIntFieldUpdateOperationsInput = {
-  set?: number | null
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
 export type TicketCreateNestedOneWithoutSurveyInput = {
   create?: Prisma.XOR<Prisma.TicketCreateWithoutSurveyInput, Prisma.TicketUncheckedCreateWithoutSurveyInput>
   connectOrCreate?: Prisma.TicketCreateOrConnectWithoutSurveyInput

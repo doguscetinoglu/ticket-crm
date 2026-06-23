@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import Sidebar from "./Sidebar";
 import NotificationBell from "./NotificationBell";
+import AnnouncementModal from "./AnnouncementModal";
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const path = usePathname();
@@ -60,6 +61,9 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
         <main className="flex-1 overflow-auto">{children}</main>
       </div>
+
+      {/* Okunmamış duyuru modalı — her sayfada öne gelir */}
+      <AnnouncementModal />
     </div>
   );
 }
