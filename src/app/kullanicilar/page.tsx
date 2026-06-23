@@ -134,10 +134,6 @@ export default function KullanicilarPage() {
                       className="p-1.5 rounded-lg bg-slate-100 dark:bg-gray-800 hover:bg-slate-200 dark:hover:bg-gray-700 text-slate-500 dark:text-gray-400 transition-colors text-xs">✏️</button>
                     <button onClick={() => setResetPw({ id: u.id, name: u.name })}
                       className="p-1.5 rounded-lg bg-slate-100 dark:bg-gray-800 hover:bg-amber-100 dark:hover:bg-amber-500/20 text-slate-500 dark:text-gray-400 hover:text-amber-600 dark:hover:text-amber-400 transition-colors text-xs">🔑</button>
-                    <button onClick={() => update(u.id, { isActive: !u.isActive })}
-                      className={`p-1.5 rounded-lg text-xs transition-colors ${u.isActive ? "bg-slate-100 dark:bg-gray-800 hover:bg-red-100 dark:hover:bg-red-500/10 text-slate-500 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400" : "bg-emerald-100 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400"}`}>
-                      {u.isActive ? "⏸" : "▶"}
-                    </button>
                     {u.id !== me?.id && (
                       <button onClick={() => deleteUser(u.id, u.name)}
                         className="p-1.5 rounded-lg bg-slate-100 dark:bg-gray-800 hover:bg-red-100 dark:hover:bg-red-500/10 text-slate-400 dark:text-gray-600 hover:text-red-500 dark:hover:text-red-400 transition-colors text-xs">🗑</button>
