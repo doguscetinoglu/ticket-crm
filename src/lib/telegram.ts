@@ -1,6 +1,12 @@
+import { isEnabled, NOTIFY_TELEGRAM } from "./settings";
+
 export async function sendTelegramMessage(chatId: string, text: string): Promise<void> {
   const token = process.env.TELEGRAM_BOT_TOKEN;
   if (!token || !chatId) return;
+  if (!(await isEnabled(NOTIFY_TELEGRAM))) {
+    console.log("[telegram] bildirimler kapalı — mesaj atlandı");
+    return;
+  }
   try {
     await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
       method: "POST",

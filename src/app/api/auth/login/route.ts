@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
 
     // Customer tablosunda ara
     const customer = await prisma.customer.findUnique({ where: { email } });
-    if (customer && customer.password && await bcrypt.compare(password, customer.password)) {
+    if (customer && customer.isActive && customer.password && await bcrypt.compare(password, customer.password)) {
       const token = await signToken({
         id: customer.id,
         email: customer.email,

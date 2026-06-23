@@ -1,4 +1,5 @@
 import nodemailer from "nodemailer";
+import { isEnabled, MAIL_TICKET_CONFIRMATION, MAIL_REPLY, MAIL_SURVEY } from "./settings";
 
 interface Attachment { url: string; name: string; size: number; type: string; }
 
@@ -51,6 +52,10 @@ export async function sendTicketConfirmationEmail(
   ticketId: number,
   subject: string,
 ): Promise<void> {
+  if (!(await isEnabled(MAIL_TICKET_CONFIRMATION))) {
+    console.log(`[mail] ticket onay maili kapalı — atlandı (Ticket #${ticketId})`);
+    return;
+  }
   const emailSubject = `[Ticket #${ticketId}] ${subject}`;
   const html = baseTemplate(`
     <p>Merhaba,</p>
@@ -77,6 +82,10 @@ export async function sendTicketClosedEmail(
   subject: string,
   surveyUrl: string,
 ): Promise<void> {
+  if (!(await isEnabled(MAIL_SURVEY))) {
+    console.log(`[mail] anket/kapanış maili kapalı — atlandı (Ticket #${ticketId})`);
+    return;
+  }
   const emailSubject = `[Ticket #${ticketId}] Destek talebiniz tamamlandı`;
 
   const starRow = [1, 2, 3, 4, 5]
@@ -192,6 +201,10 @@ export async function sendReplyEmail(
   body: string,
   attachments: Attachment[] = [],
 ): Promise<void> {
+  if (!(await isEnabled(MAIL_REPLY))) {
+    console.log(`[mail] yanıt maili kapalı — atlandı (Ticket #${ticketId})`);
+    return;
+  }
   const emailSubject = `Re: [Ticket #${ticketId}] ${subject}`;
 
   const attHtml = attachments.length > 0

@@ -55,6 +55,7 @@ export const ModelName = {
   Leave: 'Leave',
   Announcement: 'Announcement',
   AnnouncementRead: 'AnnouncementRead',
+  Setting: 'Setting',
   Notification: 'Notification',
   Customer: 'Customer',
   Company: 'Company',
@@ -144,6 +145,15 @@ export const AnnouncementReadScalarFieldEnum = {
 export type AnnouncementReadScalarFieldEnum = (typeof AnnouncementReadScalarFieldEnum)[keyof typeof AnnouncementReadScalarFieldEnum]
 
 
+export const SettingScalarFieldEnum = {
+  key: 'key',
+  value: 'value',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SettingScalarFieldEnum = (typeof SettingScalarFieldEnum)[keyof typeof SettingScalarFieldEnum]
+
+
 export const NotificationScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
@@ -167,6 +177,7 @@ export const CustomerScalarFieldEnum = {
   notes: 'notes',
   password: 'password',
   monthlyPrice: 'monthlyPrice',
+  isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

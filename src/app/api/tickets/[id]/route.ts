@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { sendTelegramMessage, statusMessage } from "@/lib/telegram";
 import { createNotification, notifyAdmins } from "@/lib/notifications";
 import { sendTicketClosedEmail } from "@/lib/email";
+import { isEnabled, MAIL_SURVEY } from "@/lib/settings";
 
 export async function PATCH(
   req: NextRequest,
@@ -60,8 +61,8 @@ export async function PATCH(
       );
     }
 
-    // Ticket kapatıldıysa: kapanma maili + anket gönder
-    if (status === "Kapalı" && oldStatus !== "Kapalı") {
+    // Ticket kapatıldıysa: kapanma maili + anket gönder (mail kapalıysa anket hiç oluşturulmaz)
+    if (status === "Kapalı" && oldStatus !== "Kapalı" && (await isEnabled(MAIL_SURVEY))) {
       const existing = await prisma.survey.findUnique({ where: { ticketId: ticket.id } });
       if (!existing) {
         const token = randomUUID();

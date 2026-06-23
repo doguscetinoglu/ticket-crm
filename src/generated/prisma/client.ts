@@ -62,6 +62,11 @@ export type Announcement = Prisma.AnnouncementModel
  */
 export type AnnouncementRead = Prisma.AnnouncementReadModel
 /**
+ * Model Setting
+ * 
+ */
+export type Setting = Prisma.SettingModel
+/**
  * Model Notification
  * 
  */

@@ -45,6 +45,7 @@ export type CustomerMinAggregateOutputType = {
   notes: string | null
   password: string | null
   monthlyPrice: number | null
+  isActive: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -58,6 +59,7 @@ export type CustomerMaxAggregateOutputType = {
   notes: string | null
   password: string | null
   monthlyPrice: number | null
+  isActive: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -71,6 +73,7 @@ export type CustomerCountAggregateOutputType = {
   notes: number
   password: number
   monthlyPrice: number
+  isActive: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -96,6 +99,7 @@ export type CustomerMinAggregateInputType = {
   notes?: true
   password?: true
   monthlyPrice?: true
+  isActive?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -109,6 +113,7 @@ export type CustomerMaxAggregateInputType = {
   notes?: true
   password?: true
   monthlyPrice?: true
+  isActive?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -122,6 +127,7 @@ export type CustomerCountAggregateInputType = {
   notes?: true
   password?: true
   monthlyPrice?: true
+  isActive?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -222,6 +228,7 @@ export type CustomerGroupByOutputType = {
   notes: string | null
   password: string | null
   monthlyPrice: number | null
+  isActive: boolean
   createdAt: Date
   updatedAt: Date
   _count: CustomerCountAggregateOutputType | null
@@ -258,6 +265,7 @@ export type CustomerWhereInput = {
   notes?: Prisma.StringNullableFilter<"Customer"> | string | null
   password?: Prisma.StringNullableFilter<"Customer"> | string | null
   monthlyPrice?: Prisma.FloatNullableFilter<"Customer"> | number | null
+  isActive?: Prisma.BoolFilter<"Customer"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Customer"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Customer"> | Date | string
   tickets?: Prisma.TicketListRelationFilter
@@ -274,6 +282,7 @@ export type CustomerOrderByWithRelationInput = {
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
   password?: Prisma.SortOrderInput | Prisma.SortOrder
   monthlyPrice?: Prisma.SortOrderInput | Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   tickets?: Prisma.TicketOrderByRelationAggregateInput
@@ -293,6 +302,7 @@ export type CustomerWhereUniqueInput = Prisma.AtLeast<{
   notes?: Prisma.StringNullableFilter<"Customer"> | string | null
   password?: Prisma.StringNullableFilter<"Customer"> | string | null
   monthlyPrice?: Prisma.FloatNullableFilter<"Customer"> | number | null
+  isActive?: Prisma.BoolFilter<"Customer"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Customer"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Customer"> | Date | string
   tickets?: Prisma.TicketListRelationFilter
@@ -309,6 +319,7 @@ export type CustomerOrderByWithAggregationInput = {
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
   password?: Prisma.SortOrderInput | Prisma.SortOrder
   monthlyPrice?: Prisma.SortOrderInput | Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.CustomerCountOrderByAggregateInput
@@ -330,6 +341,7 @@ export type CustomerScalarWhereWithAggregatesInput = {
   notes?: Prisma.StringNullableWithAggregatesFilter<"Customer"> | string | null
   password?: Prisma.StringNullableWithAggregatesFilter<"Customer"> | string | null
   monthlyPrice?: Prisma.FloatNullableWithAggregatesFilter<"Customer"> | number | null
+  isActive?: Prisma.BoolWithAggregatesFilter<"Customer"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Customer"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Customer"> | Date | string
 }
@@ -342,6 +354,7 @@ export type CustomerCreateInput = {
   notes?: string | null
   password?: string | null
   monthlyPrice?: number | null
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tickets?: Prisma.TicketCreateNestedManyWithoutCustomerInput
@@ -358,6 +371,7 @@ export type CustomerUncheckedCreateInput = {
   notes?: string | null
   password?: string | null
   monthlyPrice?: number | null
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tickets?: Prisma.TicketUncheckedCreateNestedManyWithoutCustomerInput
@@ -373,6 +387,7 @@ export type CustomerUpdateInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   monthlyPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tickets?: Prisma.TicketUpdateManyWithoutCustomerNestedInput
@@ -389,6 +404,7 @@ export type CustomerUncheckedUpdateInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   monthlyPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tickets?: Prisma.TicketUncheckedUpdateManyWithoutCustomerNestedInput
@@ -405,6 +421,7 @@ export type CustomerCreateManyInput = {
   notes?: string | null
   password?: string | null
   monthlyPrice?: number | null
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -417,6 +434,7 @@ export type CustomerUpdateManyMutationInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   monthlyPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -430,6 +448,7 @@ export type CustomerUncheckedUpdateManyInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   monthlyPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -443,6 +462,7 @@ export type CustomerCountOrderByAggregateInput = {
   notes?: Prisma.SortOrder
   password?: Prisma.SortOrder
   monthlyPrice?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -461,6 +481,7 @@ export type CustomerMaxOrderByAggregateInput = {
   notes?: Prisma.SortOrder
   password?: Prisma.SortOrder
   monthlyPrice?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -474,6 +495,7 @@ export type CustomerMinOrderByAggregateInput = {
   notes?: Prisma.SortOrder
   password?: Prisma.SortOrder
   monthlyPrice?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -555,6 +577,7 @@ export type CustomerCreateWithoutCompaniesInput = {
   notes?: string | null
   password?: string | null
   monthlyPrice?: number | null
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tickets?: Prisma.TicketCreateNestedManyWithoutCustomerInput
@@ -570,6 +593,7 @@ export type CustomerUncheckedCreateWithoutCompaniesInput = {
   notes?: string | null
   password?: string | null
   monthlyPrice?: number | null
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tickets?: Prisma.TicketUncheckedCreateNestedManyWithoutCustomerInput
@@ -600,6 +624,7 @@ export type CustomerUpdateWithoutCompaniesInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   monthlyPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tickets?: Prisma.TicketUpdateManyWithoutCustomerNestedInput
@@ -615,6 +640,7 @@ export type CustomerUncheckedUpdateWithoutCompaniesInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   monthlyPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tickets?: Prisma.TicketUncheckedUpdateManyWithoutCustomerNestedInput
@@ -629,6 +655,7 @@ export type CustomerCreateWithoutTicketsInput = {
   notes?: string | null
   password?: string | null
   monthlyPrice?: number | null
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   projects?: Prisma.ProjectCreateNestedManyWithoutCustomerInput
@@ -644,6 +671,7 @@ export type CustomerUncheckedCreateWithoutTicketsInput = {
   notes?: string | null
   password?: string | null
   monthlyPrice?: number | null
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutCustomerInput
@@ -674,6 +702,7 @@ export type CustomerUpdateWithoutTicketsInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   monthlyPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   projects?: Prisma.ProjectUpdateManyWithoutCustomerNestedInput
@@ -689,6 +718,7 @@ export type CustomerUncheckedUpdateWithoutTicketsInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   monthlyPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   projects?: Prisma.ProjectUncheckedUpdateManyWithoutCustomerNestedInput
@@ -703,6 +733,7 @@ export type CustomerCreateWithoutProjectsInput = {
   notes?: string | null
   password?: string | null
   monthlyPrice?: number | null
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tickets?: Prisma.TicketCreateNestedManyWithoutCustomerInput
@@ -718,6 +749,7 @@ export type CustomerUncheckedCreateWithoutProjectsInput = {
   notes?: string | null
   password?: string | null
   monthlyPrice?: number | null
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tickets?: Prisma.TicketUncheckedCreateNestedManyWithoutCustomerInput
@@ -748,6 +780,7 @@ export type CustomerUpdateWithoutProjectsInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   monthlyPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tickets?: Prisma.TicketUpdateManyWithoutCustomerNestedInput
@@ -763,6 +796,7 @@ export type CustomerUncheckedUpdateWithoutProjectsInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   monthlyPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tickets?: Prisma.TicketUncheckedUpdateManyWithoutCustomerNestedInput
@@ -827,6 +861,7 @@ export type CustomerSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   notes?: boolean
   password?: boolean
   monthlyPrice?: boolean
+  isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   tickets?: boolean | Prisma.Customer$ticketsArgs<ExtArgs>
@@ -844,6 +879,7 @@ export type CustomerSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   notes?: boolean
   password?: boolean
   monthlyPrice?: boolean
+  isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["customer"]>
@@ -857,6 +893,7 @@ export type CustomerSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   notes?: boolean
   password?: boolean
   monthlyPrice?: boolean
+  isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["customer"]>
@@ -870,11 +907,12 @@ export type CustomerSelectScalar = {
   notes?: boolean
   password?: boolean
   monthlyPrice?: boolean
+  isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type CustomerOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "name" | "company" | "phone" | "notes" | "password" | "monthlyPrice" | "createdAt" | "updatedAt", ExtArgs["result"]["customer"]>
+export type CustomerOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "name" | "company" | "phone" | "notes" | "password" | "monthlyPrice" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["customer"]>
 export type CustomerInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tickets?: boolean | Prisma.Customer$ticketsArgs<ExtArgs>
   projects?: boolean | Prisma.Customer$projectsArgs<ExtArgs>
@@ -900,6 +938,7 @@ export type $CustomerPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     notes: string | null
     password: string | null
     monthlyPrice: number | null
+    isActive: boolean
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["customer"]>
@@ -1336,6 +1375,7 @@ export interface CustomerFieldRefs {
   readonly notes: Prisma.FieldRef<"Customer", 'String'>
   readonly password: Prisma.FieldRef<"Customer", 'String'>
   readonly monthlyPrice: Prisma.FieldRef<"Customer", 'Float'>
+  readonly isActive: Prisma.FieldRef<"Customer", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Customer", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Customer", 'DateTime'>
 }

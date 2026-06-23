@@ -41,7 +41,7 @@ export async function PATCH(
   if (!session || session.type !== "admin") return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   const { id } = await params;
-  const { name, company, phone, notes, monthlyPrice, portalPassword } = await req.json();
+  const { name, company, phone, notes, monthlyPrice, portalPassword, isActive } = await req.json();
 
   const customer = await prisma.customer.update({
     where: { id: Number(id) },
@@ -52,6 +52,7 @@ export async function PATCH(
       ...(notes !== undefined && { notes }),
       ...(monthlyPrice !== undefined && { monthlyPrice: monthlyPrice === "" ? null : Number(monthlyPrice) }),
       ...(portalPassword && { password: await bcrypt.hash(portalPassword, 10) }),
+      ...(isActive !== undefined && { isActive: !!isActive }),
     },
   });
 
