@@ -1,10 +1,10 @@
-# Ticket-CRM
+# AnahtarDestek
 
 Müşteri destek bileti yönetimi + proje takibi sistemi.
 
-**Production:** https://ticket-crm-xi.vercel.app  
-**GitHub:** https://github.com/doguscetinoglu/ticket-crm  
-**Vercel:** i-fox-s-projects/ticket-crm  
+**Production:** https://anahtar-destek.vercel.app  
+**GitHub:** https://github.com/doguscetinoglu/anahtar-destek  
+**Vercel:** i-fox-s-projects/anahtar-destek  
 
 > Fox-CRM (https://fox-crm-gray.vercel.app) ile ayrı projedir, karıştırılmamalı.
 
@@ -71,7 +71,7 @@ git push origin master
 vercel promote <deployment-url> --scope i-fox-s-projects
 
 # Domain alias güncelle:
-vercel alias set <deployment-url> ticket-crm-xi.vercel.app --scope i-fox-s-projects
+vercel alias set <deployment-url> anahtar-destek.vercel.app --scope i-fox-s-projects
 ```
 
 ## Güncellemeler

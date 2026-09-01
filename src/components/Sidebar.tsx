@@ -93,11 +93,11 @@ export default function Sidebar({ onClose }: { onClose?: () => void }) {
       <div className="px-4 py-5 border-b border-gray-800/60">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 via-violet-500 to-purple-600 flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-indigo-600/30 shrink-0">
-            T
+            A
           </div>
           <div>
-            <p className="font-bold text-gray-100 text-sm leading-none tracking-tight">Ticket CRM</p>
-            <p className="text-[11px] text-gray-500 mt-0.5">Destek Merkezi</p>
+            <p className="font-bold text-gray-100 text-sm leading-none tracking-tight">AnahtarDestek</p>
+            <p className="text-[11px] text-gray-500 mt-0.5">Destek &amp; Proje Yönetimi</p>
           </div>
         </div>
       </div>

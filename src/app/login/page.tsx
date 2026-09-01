@@ -145,9 +145,9 @@ export default function LoginPage() {
               boxShadow: "0 8px 32px rgba(99,102,241,0.5), 0 0 0 1px rgba(255,255,255,0.15)",
             }}
           >
-            T
+            A
           </div>
-          <h1 className="text-2xl font-bold text-white tracking-tight">Ticket CRM</h1>
+          <h1 className="text-2xl font-bold text-white tracking-tight">AnahtarDestek</h1>
           <p className="text-sm mt-1" style={{ color: "rgba(255,255,255,0.45)" }}>Müşteri Destek Merkezi</p>
         </div>
 

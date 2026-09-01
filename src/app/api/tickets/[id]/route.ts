@@ -67,7 +67,7 @@ export async function PATCH(
       if (!existing) {
         const token = randomUUID();
         await prisma.survey.create({ data: { ticketId: ticket.id, token } });
-        const appUrl = new URL(process.env.APP_URL || "https://ticket-crm-xi.vercel.app").origin;
+        const appUrl = new URL(process.env.APP_URL || "https://anahtar-destek.vercel.app").origin;
         const surveyUrl = `${appUrl}/anket/${token}`;
         try {
           await sendTicketClosedEmail(ticket.fromEmail, ticket.id, ticket.subject, surveyUrl);

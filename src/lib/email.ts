@@ -37,7 +37,7 @@ function baseTemplate(content: string): string {
 <body>
 <div class="wrap">
   <div class="header">
-    <h1>Ticket CRM</h1>
+    <h1>AnahtarDestek</h1>
     <p>Müşteri Destek Sistemi</p>
   </div>
   <div class="body">${content}</div>
@@ -67,7 +67,7 @@ export async function sendTicketConfirmationEmail(
   `);
 
   await transporter.sendMail({
-    from: `"Destek Merkezi" <${process.env.EMAIL_FROM}>`,
+    from: `"AnahtarDestek" <${process.env.EMAIL_FROM}>`,
     to,
     subject: emailSubject,
     html,
@@ -174,7 +174,7 @@ export async function sendTicketClosedEmail(
   <!-- Footer -->
   <div style="background:#f8fafc;border:1px solid #e2e8f0;border-top:none;border-radius:0 0 20px 20px;padding:20px 40px;text-align:center;">
     <p style="margin:0;font-size:12px;color:#94a3b8;line-height:1.7;">
-      Bu e-posta Ticket CRM tarafından otomatik gönderilmiştir.<br>
+      Bu e-posta AnahtarDestek tarafından otomatik gönderilmiştir.<br>
       Anket bağlantısı 30 gün geçerlidir.
     </p>
   </div>
@@ -184,7 +184,7 @@ export async function sendTicketClosedEmail(
 </html>`;
 
   await transporter.sendMail({
-    from: `"Destek Merkezi" <${process.env.EMAIL_FROM}>`,
+    from: `"AnahtarDestek" <${process.env.EMAIL_FROM}>`,
     to,
     subject: emailSubject,
     html,
@@ -228,7 +228,7 @@ export async function sendReplyEmail(
     : "";
 
   await transporter.sendMail({
-    from: `"Destek Merkezi" <${process.env.EMAIL_FROM}>`,
+    from: `"AnahtarDestek" <${process.env.EMAIL_FROM}>`,
     to,
     subject: emailSubject,
     html,

@@ -31,7 +31,7 @@ export async function GET() {
     const info = await transporter.sendMail({
       from: `"Test" <${config.from}>`,
       to: config.user!,
-      subject: "Ticket CRM - SMTP Test",
+      subject: "AnahtarDestek - SMTP Test",
       text: "SMTP bağlantısı çalışıyor.",
     });
 
