@@ -57,7 +57,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           {/* Sağa yasla */}
           <div className="flex-1" />
 
-          {/* Çevrimiçi ekip — sadece yöneticilere görünür */}
+          {/* Çevrimiçi ekip durumu */}
           <OnlineUsers />
 
           {/* Bildirim zili */}

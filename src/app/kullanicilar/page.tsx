@@ -61,7 +61,7 @@ export default function KullanicilarPage() {
     setUsers(Array.isArray(uRes) ? uRes : []);
   }, []);
 
-  // Çevrimiçi durumu — sadece yöneticiye döner, 25 sn'de bir tazelenir.
+  // Çevrimiçi durumu — 25 sn'de bir tazelenir.
   const fetchPresence = useCallback(async () => {
     try {
       const res = await fetch("/api/presence");

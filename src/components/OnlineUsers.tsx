@@ -33,10 +33,10 @@ function lastSeenText(iso: string | null): string {
   return `${Math.floor(diff / 86400)} gün önce`;
 }
 
-/** Üst barda yalnızca yöneticilere görünen çevrimiçi ekip göstergesi. */
+/** Üst barda tüm ekip üyelerine görünen çevrimiçi ekip göstergesi. */
 export default function OnlineUsers() {
   const [users, setUsers] = useState<PresenceUser[]>([]);
-  const [visible, setVisible] = useState(false); // yalnızca admin ise true
+  const [visible, setVisible] = useState(false); // yetkisi olmayan (müşteri portalı) oturumlarda gizli
   const [open, setOpen] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
   const btnRef = useRef<HTMLButtonElement>(null);

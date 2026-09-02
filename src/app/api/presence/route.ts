@@ -60,11 +60,11 @@ export interface PresenceUser {
 
 const ORDER: Record<PresenceStatus, number> = { online: 0, idle: 1, offline: 2 };
 
-/** GET /api/presence — sadece yöneticiler; tüm ekibin çevrimiçi durumu. */
+/** GET /api/presence — tüm ekip üyeleri görebilir; müşteri portalı hariç. */
 export async function GET() {
   const session = await getSession();
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  if (session.type !== "admin") return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  if (session.type === "customer") return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   const users = await prisma.user.findMany({
     where: { isActive: true },
