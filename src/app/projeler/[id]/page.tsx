@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 
 interface User { id: number; name: string; color: string; role: string; }
@@ -65,7 +65,9 @@ function calcProgress(steps: Step[]) {
 
 export default function ProjeDetayPage() {
   const { id } = useParams<{ id: string }>();
+  const router = useRouter();
   const [me, setMe] = useState<{ id: number; type: string } | null>(null);
+  const [deleting, setDeleting] = useState(false);
   const [project, setProject] = useState<Project | null>(null);
   const [users, setUsers] = useState<User[]>([]);
   const [customers, setCustomers] = useState<{ id: number; name: string | null }[]>([]);
@@ -166,6 +168,24 @@ export default function ProjeDetayPage() {
 
   const exportFile = (type: string) => {
     window.open(`/api/projects/${id}/export?type=${type}`, "_blank");
+  };
+
+  // Projeyi sil — sadece admin; adımlar, görevler, mesajlar ve loglar da silinir.
+  const deleteProject = async () => {
+    if (!project) return;
+    const taskCount = project.steps.flatMap(s => s.tasks).length;
+    const ok = confirm(
+      `"${project.name}" projesi kalıcı olarak silinecek.\n\n` +
+      `${project.steps.length} adım, ${taskCount} görev, tüm mesajlar ve hareket kayıtları da silinir.\n` +
+      `Bu işlem geri alınamaz.\n\nDevam edilsin mi?`
+    );
+    if (!ok) return;
+    setDeleting(true);
+    const res = await fetch(`/api/projects/${id}`, { method: "DELETE" });
+    setDeleting(false);
+    if (!res.ok) { alert("Proje silinemedi."); return; }
+    router.push("/projeler");
+    router.refresh();
   };
 
   if (!project) return (
@@ -279,6 +299,13 @@ export default function ProjeDetayPage() {
               className="flex items-center gap-1.5 px-3 py-1.5 bg-white/15 hover:bg-white/25 text-white text-xs font-semibold rounded-xl transition-all">
               📄 Rapor
             </button>
+            {isAdmin && (
+              <button onClick={deleteProject} disabled={deleting}
+                title="Projeyi sil"
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-red-500/25 hover:bg-red-500/40 disabled:opacity-50 text-white text-xs font-semibold rounded-xl transition-all">
+                🗑 {deleting ? "Siliniyor..." : "Sil"}
+              </button>
+            )}
           </div>
         </div>
       </div>
