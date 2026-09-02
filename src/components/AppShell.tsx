@@ -5,6 +5,8 @@ import { useState } from "react";
 import Sidebar from "./Sidebar";
 import NotificationBell from "./NotificationBell";
 import AnnouncementModal from "./AnnouncementModal";
+import OnlineUsers from "./OnlineUsers";
+import PresenceTracker from "./PresenceTracker";
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const path = usePathname();
@@ -55,6 +57,9 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           {/* Sağa yasla */}
           <div className="flex-1" />
 
+          {/* Çevrimiçi ekip — sadece yöneticilere görünür */}
+          <OnlineUsers />
+
           {/* Bildirim zili */}
           <NotificationBell />
         </header>
@@ -64,6 +69,9 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
       {/* Okunmamış duyuru modalı — her sayfada öne gelir */}
       <AnnouncementModal />
+
+      {/* Çevrimiçi durumu heartbeat'i */}
+      <PresenceTracker />
     </div>
   );
 }

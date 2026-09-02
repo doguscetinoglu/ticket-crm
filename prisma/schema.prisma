@@ -17,6 +17,12 @@ model User {
   color     String   @default("indigo")
   isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
+
+  // Çevrimiçi durumu (presence)
+  lastSeenAt   DateTime? // son heartbeat — sekme açık olduğu sürece güncellenir
+  lastActiveAt DateTime? // son gerçek etkileşim (fare/klavye) — boşta mı ayrımı için
+  lastSeenPath String? // heartbeat anında bulunduğu sayfa
+
   tickets        Ticket[]
   replies        TicketReply[]
   projectMembers ProjectMember[]

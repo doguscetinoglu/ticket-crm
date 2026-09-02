@@ -4,9 +4,31 @@ import { useCallback, useEffect, useState } from "react";
 import UserAvatar from "@/components/UserAvatar";
 import { StatusBadge, PriorityBadge } from "@/components/StatusBadge";
 import type { SessionUser } from "@/lib/session";
+import { pageLabel, STATUS_LABEL, type PresenceStatus } from "@/lib/presence";
 
 interface User { id: number; name: string; email: string; role: string; color: string; isAdmin: boolean; isActive: boolean; createdAt: string; _count: { tickets: number }; openTickets: number; }
 interface Ticket { id: number; subject: string; status: string; priority: string; category: string; receivedAt: string; }
+interface Presence { id: number; status: PresenceStatus; lastSeenAt: string | null; lastSeenPath: string | null; }
+
+const PRESENCE_DOT: Record<PresenceStatus, string> = {
+  online: "bg-emerald-500",
+  idle: "bg-amber-400",
+  offline: "bg-slate-300 dark:bg-gray-600",
+};
+const PRESENCE_PILL: Record<PresenceStatus, string> = {
+  online: "bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400",
+  idle: "bg-amber-100 dark:bg-amber-500/20 text-amber-700 dark:text-amber-400",
+  offline: "bg-slate-100 dark:bg-gray-800 text-slate-400 dark:text-gray-600",
+};
+
+function lastSeenText(iso: string | null): string {
+  if (!iso) return "bilinmiyor";
+  const diff = Math.floor((Date.now() - new Date(iso).getTime()) / 1000);
+  if (diff < 90) return "az önce";
+  if (diff < 3600) return `${Math.floor(diff / 60)} dk önce`;
+  if (diff < 86400) return `${Math.floor(diff / 3600)} sa önce`;
+  return `${Math.floor(diff / 86400)} gün önce`;
+}
 
 const COLORS       = ["blue", "purple", "green", "pink", "orange", "indigo", "teal"];
 const COLOR_LABELS: Record<string, string> = { blue: "Mavi", purple: "Mor", green: "Yeşil", pink: "Pembe", orange: "Turuncu", indigo: "İndigo", teal: "Teal" };
@@ -19,6 +41,7 @@ const inputCls = "w-full bg-slate-50 dark:bg-gray-800 border border-slate-200 da
 export default function KullanicilarPage() {
   const [me, setMe]         = useState<SessionUser | null>(null);
   const [users, setUsers]   = useState<User[]>([]);
+  const [presence, setPresence] = useState<Record<number, Presence>>({});
   const [selected, setSelected] = useState<number | null>(null);
   const [tickets, setTickets]   = useState<Ticket[]>([]);
   const [adding, setAdding]     = useState(false);
@@ -38,7 +61,25 @@ export default function KullanicilarPage() {
     setUsers(Array.isArray(uRes) ? uRes : []);
   }, []);
 
+  // Çevrimiçi durumu — sadece yöneticiye döner, 25 sn'de bir tazelenir.
+  const fetchPresence = useCallback(async () => {
+    try {
+      const res = await fetch("/api/presence");
+      if (!res.ok) return;
+      const data = await res.json();
+      const map: Record<number, Presence> = {};
+      for (const p of (data.users ?? []) as Presence[]) map[p.id] = p;
+      setPresence(map);
+    } catch {}
+  }, []);
+
   useEffect(() => { fetchUsers(); }, [fetchUsers]);
+
+  useEffect(() => {
+    fetchPresence();
+    const id = setInterval(fetchPresence, 25_000);
+    return () => clearInterval(id);
+  }, [fetchPresence]);
 
   const selectUser = async (uid: number) => {
     if (selected === uid) { setSelected(null); setTickets([]); return; }
@@ -93,9 +134,10 @@ export default function KullanicilarPage() {
       </div>
 
       {/* KPI */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
         {[
           { label: "Toplam",        val: users.length,                                  color: "text-slate-700 dark:text-gray-200" },
+          { label: "Çevrimiçi",     val: Object.values(presence).filter(p => p.status === "online").length, color: "text-emerald-600 dark:text-emerald-400" },
           { label: "Aktif",         val: users.filter(u => u.isActive).length,          color: "text-emerald-600 dark:text-emerald-400" },
           { label: "Admin",         val: users.filter(u => u.isAdmin).length,           color: "text-amber-600 dark:text-amber-400" },
           { label: "Toplam Ticket", val: users.reduce((s, u) => s + u._count.tickets, 0), color: "text-indigo-600 dark:text-indigo-400" },
@@ -112,6 +154,8 @@ export default function KullanicilarPage() {
         {users.map(u => {
           const pct = Math.round((u._count.tickets / maxTickets) * 100);
           const isSel = selected === u.id;
+          const pres = presence[u.id];
+          const presPage = pres ? pageLabel(pres.lastSeenPath) : null;
           return (
             <div key={u.id}
               className={`bg-white dark:bg-gray-900 border rounded-2xl p-5 shadow-sm dark:shadow-none transition-all ${isSel ? "border-indigo-300 dark:border-indigo-600/50 ring-1 ring-indigo-200 dark:ring-indigo-600/20" : "border-slate-200 dark:border-gray-800 hover:border-indigo-200 dark:hover:border-gray-700"}`}>
@@ -119,7 +163,14 @@ export default function KullanicilarPage() {
                 <div className="flex items-center gap-3 min-w-0">
                   <div className="relative shrink-0">
                     <UserAvatar name={u.name} color={u.color} size="lg" />
-                    {!u.isActive && <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-red-500 rounded-full border-2 border-white dark:border-gray-900" />}
+                    {!u.isActive
+                      ? <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-red-500 rounded-full border-2 border-white dark:border-gray-900" />
+                      : pres && (
+                        <span
+                          title={pres.status === "offline" ? `Son görülme: ${lastSeenText(pres.lastSeenAt)}` : STATUS_LABEL[pres.status]}
+                          className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-white dark:border-gray-900 ${PRESENCE_DOT[pres.status]}`}
+                        />
+                      )}
                     {u.isAdmin && <span className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 bg-amber-500 rounded-full border-2 border-white dark:border-gray-900 flex items-center justify-center text-white text-[7px] font-bold">A</span>}
                   </div>
                   <div className="min-w-0">
@@ -154,6 +205,13 @@ export default function KullanicilarPage() {
                   <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${u.openTickets > 0 ? "bg-amber-100 dark:bg-amber-500/20 text-amber-700 dark:text-amber-300" : "bg-slate-100 dark:bg-gray-800 text-slate-400 dark:text-gray-600"}`}>
                     {u.openTickets} açık
                   </span>
+                  {pres && u.isActive && (pres.status !== "offline" || pres.lastSeenAt) && (
+                    <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${PRESENCE_PILL[pres.status]}`}>
+                      {pres.status === "offline"
+                        ? `Son görülme: ${lastSeenText(pres.lastSeenAt)}`
+                        : presPage ? `${STATUS_LABEL[pres.status]} · ${presPage}` : STATUS_LABEL[pres.status]}
+                    </span>
+                  )}
                   {!u.isActive && <span className="text-xs px-2 py-0.5 rounded-full bg-red-100 dark:bg-red-500/20 text-red-600 dark:text-red-400 font-medium">Pasif</span>}
                   {u.isAdmin && <span className="text-xs px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-500/20 text-amber-700 dark:text-amber-400 font-medium">Admin</span>}
                 </div>

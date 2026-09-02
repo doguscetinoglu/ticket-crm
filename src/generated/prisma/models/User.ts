@@ -44,6 +44,9 @@ export type UserMinAggregateOutputType = {
   color: string | null
   isActive: boolean | null
   createdAt: Date | null
+  lastSeenAt: Date | null
+  lastActiveAt: Date | null
+  lastSeenPath: string | null
 }
 
 export type UserMaxAggregateOutputType = {
@@ -56,6 +59,9 @@ export type UserMaxAggregateOutputType = {
   color: string | null
   isActive: boolean | null
   createdAt: Date | null
+  lastSeenAt: Date | null
+  lastActiveAt: Date | null
+  lastSeenPath: string | null
 }
 
 export type UserCountAggregateOutputType = {
@@ -68,6 +74,9 @@ export type UserCountAggregateOutputType = {
   color: number
   isActive: number
   createdAt: number
+  lastSeenAt: number
+  lastActiveAt: number
+  lastSeenPath: number
   _all: number
 }
 
@@ -90,6 +99,9 @@ export type UserMinAggregateInputType = {
   color?: true
   isActive?: true
   createdAt?: true
+  lastSeenAt?: true
+  lastActiveAt?: true
+  lastSeenPath?: true
 }
 
 export type UserMaxAggregateInputType = {
@@ -102,6 +114,9 @@ export type UserMaxAggregateInputType = {
   color?: true
   isActive?: true
   createdAt?: true
+  lastSeenAt?: true
+  lastActiveAt?: true
+  lastSeenPath?: true
 }
 
 export type UserCountAggregateInputType = {
@@ -114,6 +129,9 @@ export type UserCountAggregateInputType = {
   color?: true
   isActive?: true
   createdAt?: true
+  lastSeenAt?: true
+  lastActiveAt?: true
+  lastSeenPath?: true
   _all?: true
 }
 
@@ -213,6 +231,9 @@ export type UserGroupByOutputType = {
   color: string
   isActive: boolean
   createdAt: Date
+  lastSeenAt: Date | null
+  lastActiveAt: Date | null
+  lastSeenPath: string | null
   _count: UserCountAggregateOutputType | null
   _avg: UserAvgAggregateOutputType | null
   _sum: UserSumAggregateOutputType | null
@@ -248,6 +269,9 @@ export type UserWhereInput = {
   color?: Prisma.StringFilter<"User"> | string
   isActive?: Prisma.BoolFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  lastSeenAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  lastActiveAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  lastSeenPath?: Prisma.StringNullableFilter<"User"> | string | null
   tickets?: Prisma.TicketListRelationFilter
   replies?: Prisma.TicketReplyListRelationFilter
   projectMembers?: Prisma.ProjectMemberListRelationFilter
@@ -268,6 +292,9 @@ export type UserOrderByWithRelationInput = {
   color?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  lastSeenAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  lastActiveAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  lastSeenPath?: Prisma.SortOrderInput | Prisma.SortOrder
   tickets?: Prisma.TicketOrderByRelationAggregateInput
   replies?: Prisma.TicketReplyOrderByRelationAggregateInput
   projectMembers?: Prisma.ProjectMemberOrderByRelationAggregateInput
@@ -291,6 +318,9 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   color?: Prisma.StringFilter<"User"> | string
   isActive?: Prisma.BoolFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  lastSeenAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  lastActiveAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  lastSeenPath?: Prisma.StringNullableFilter<"User"> | string | null
   tickets?: Prisma.TicketListRelationFilter
   replies?: Prisma.TicketReplyListRelationFilter
   projectMembers?: Prisma.ProjectMemberListRelationFilter
@@ -311,6 +341,9 @@ export type UserOrderByWithAggregationInput = {
   color?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  lastSeenAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  lastActiveAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  lastSeenPath?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
   _avg?: Prisma.UserAvgOrderByAggregateInput
   _max?: Prisma.UserMaxOrderByAggregateInput
@@ -331,6 +364,9 @@ export type UserScalarWhereWithAggregatesInput = {
   color?: Prisma.StringWithAggregatesFilter<"User"> | string
   isActive?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
+  lastSeenAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+  lastActiveAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+  lastSeenPath?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
 }
 
 export type UserCreateInput = {
@@ -342,6 +378,9 @@ export type UserCreateInput = {
   color?: string
   isActive?: boolean
   createdAt?: Date | string
+  lastSeenAt?: Date | string | null
+  lastActiveAt?: Date | string | null
+  lastSeenPath?: string | null
   tickets?: Prisma.TicketCreateNestedManyWithoutAssigneeInput
   replies?: Prisma.TicketReplyCreateNestedManyWithoutUserInput
   projectMembers?: Prisma.ProjectMemberCreateNestedManyWithoutUserInput
@@ -362,6 +401,9 @@ export type UserUncheckedCreateInput = {
   color?: string
   isActive?: boolean
   createdAt?: Date | string
+  lastSeenAt?: Date | string | null
+  lastActiveAt?: Date | string | null
+  lastSeenPath?: string | null
   tickets?: Prisma.TicketUncheckedCreateNestedManyWithoutAssigneeInput
   replies?: Prisma.TicketReplyUncheckedCreateNestedManyWithoutUserInput
   projectMembers?: Prisma.ProjectMemberUncheckedCreateNestedManyWithoutUserInput
@@ -381,6 +423,9 @@ export type UserUpdateInput = {
   color?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeenPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tickets?: Prisma.TicketUpdateManyWithoutAssigneeNestedInput
   replies?: Prisma.TicketReplyUpdateManyWithoutUserNestedInput
   projectMembers?: Prisma.ProjectMemberUpdateManyWithoutUserNestedInput
@@ -401,6 +446,9 @@ export type UserUncheckedUpdateInput = {
   color?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeenPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tickets?: Prisma.TicketUncheckedUpdateManyWithoutAssigneeNestedInput
   replies?: Prisma.TicketReplyUncheckedUpdateManyWithoutUserNestedInput
   projectMembers?: Prisma.ProjectMemberUncheckedUpdateManyWithoutUserNestedInput
@@ -421,6 +469,9 @@ export type UserCreateManyInput = {
   color?: string
   isActive?: boolean
   createdAt?: Date | string
+  lastSeenAt?: Date | string | null
+  lastActiveAt?: Date | string | null
+  lastSeenPath?: string | null
 }
 
 export type UserUpdateManyMutationInput = {
@@ -432,6 +483,9 @@ export type UserUpdateManyMutationInput = {
   color?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeenPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type UserUncheckedUpdateManyInput = {
@@ -444,6 +498,9 @@ export type UserUncheckedUpdateManyInput = {
   color?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeenPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type UserCountOrderByAggregateInput = {
@@ -456,6 +513,9 @@ export type UserCountOrderByAggregateInput = {
   color?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  lastSeenAt?: Prisma.SortOrder
+  lastActiveAt?: Prisma.SortOrder
+  lastSeenPath?: Prisma.SortOrder
 }
 
 export type UserAvgOrderByAggregateInput = {
@@ -472,6 +532,9 @@ export type UserMaxOrderByAggregateInput = {
   color?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  lastSeenAt?: Prisma.SortOrder
+  lastActiveAt?: Prisma.SortOrder
+  lastSeenPath?: Prisma.SortOrder
 }
 
 export type UserMinOrderByAggregateInput = {
@@ -484,6 +547,9 @@ export type UserMinOrderByAggregateInput = {
   color?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  lastSeenAt?: Prisma.SortOrder
+  lastActiveAt?: Prisma.SortOrder
+  lastSeenPath?: Prisma.SortOrder
 }
 
 export type UserSumOrderByAggregateInput = {
@@ -510,6 +576,14 @@ export type BoolFieldUpdateOperationsInput = {
 
 export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
+}
+
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
+}
+
+export type NullableStringFieldUpdateOperationsInput = {
+  set?: string | null
 }
 
 export type IntFieldUpdateOperationsInput = {
@@ -647,6 +721,9 @@ export type UserCreateWithoutLeavesInput = {
   color?: string
   isActive?: boolean
   createdAt?: Date | string
+  lastSeenAt?: Date | string | null
+  lastActiveAt?: Date | string | null
+  lastSeenPath?: string | null
   tickets?: Prisma.TicketCreateNestedManyWithoutAssigneeInput
   replies?: Prisma.TicketReplyCreateNestedManyWithoutUserInput
   projectMembers?: Prisma.ProjectMemberCreateNestedManyWithoutUserInput
@@ -666,6 +743,9 @@ export type UserUncheckedCreateWithoutLeavesInput = {
   color?: string
   isActive?: boolean
   createdAt?: Date | string
+  lastSeenAt?: Date | string | null
+  lastActiveAt?: Date | string | null
+  lastSeenPath?: string | null
   tickets?: Prisma.TicketUncheckedCreateNestedManyWithoutAssigneeInput
   replies?: Prisma.TicketReplyUncheckedCreateNestedManyWithoutUserInput
   projectMembers?: Prisma.ProjectMemberUncheckedCreateNestedManyWithoutUserInput
@@ -689,6 +769,9 @@ export type UserCreateWithoutReviewedLeavesInput = {
   color?: string
   isActive?: boolean
   createdAt?: Date | string
+  lastSeenAt?: Date | string | null
+  lastActiveAt?: Date | string | null
+  lastSeenPath?: string | null
   tickets?: Prisma.TicketCreateNestedManyWithoutAssigneeInput
   replies?: Prisma.TicketReplyCreateNestedManyWithoutUserInput
   projectMembers?: Prisma.ProjectMemberCreateNestedManyWithoutUserInput
@@ -708,6 +791,9 @@ export type UserUncheckedCreateWithoutReviewedLeavesInput = {
   color?: string
   isActive?: boolean
   createdAt?: Date | string
+  lastSeenAt?: Date | string | null
+  lastActiveAt?: Date | string | null
+  lastSeenPath?: string | null
   tickets?: Prisma.TicketUncheckedCreateNestedManyWithoutAssigneeInput
   replies?: Prisma.TicketReplyUncheckedCreateNestedManyWithoutUserInput
   projectMembers?: Prisma.ProjectMemberUncheckedCreateNestedManyWithoutUserInput
@@ -742,6 +828,9 @@ export type UserUpdateWithoutLeavesInput = {
   color?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeenPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tickets?: Prisma.TicketUpdateManyWithoutAssigneeNestedInput
   replies?: Prisma.TicketReplyUpdateManyWithoutUserNestedInput
   projectMembers?: Prisma.ProjectMemberUpdateManyWithoutUserNestedInput
@@ -761,6 +850,9 @@ export type UserUncheckedUpdateWithoutLeavesInput = {
   color?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeenPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tickets?: Prisma.TicketUncheckedUpdateManyWithoutAssigneeNestedInput
   replies?: Prisma.TicketReplyUncheckedUpdateManyWithoutUserNestedInput
   projectMembers?: Prisma.ProjectMemberUncheckedUpdateManyWithoutUserNestedInput
@@ -790,6 +882,9 @@ export type UserUpdateWithoutReviewedLeavesInput = {
   color?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeenPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tickets?: Prisma.TicketUpdateManyWithoutAssigneeNestedInput
   replies?: Prisma.TicketReplyUpdateManyWithoutUserNestedInput
   projectMembers?: Prisma.ProjectMemberUpdateManyWithoutUserNestedInput
@@ -809,6 +904,9 @@ export type UserUncheckedUpdateWithoutReviewedLeavesInput = {
   color?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeenPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tickets?: Prisma.TicketUncheckedUpdateManyWithoutAssigneeNestedInput
   replies?: Prisma.TicketReplyUncheckedUpdateManyWithoutUserNestedInput
   projectMembers?: Prisma.ProjectMemberUncheckedUpdateManyWithoutUserNestedInput
@@ -827,6 +925,9 @@ export type UserCreateWithoutAnnouncementsInput = {
   color?: string
   isActive?: boolean
   createdAt?: Date | string
+  lastSeenAt?: Date | string | null
+  lastActiveAt?: Date | string | null
+  lastSeenPath?: string | null
   tickets?: Prisma.TicketCreateNestedManyWithoutAssigneeInput
   replies?: Prisma.TicketReplyCreateNestedManyWithoutUserInput
   projectMembers?: Prisma.ProjectMemberCreateNestedManyWithoutUserInput
@@ -846,6 +947,9 @@ export type UserUncheckedCreateWithoutAnnouncementsInput = {
   color?: string
   isActive?: boolean
   createdAt?: Date | string
+  lastSeenAt?: Date | string | null
+  lastActiveAt?: Date | string | null
+  lastSeenPath?: string | null
   tickets?: Prisma.TicketUncheckedCreateNestedManyWithoutAssigneeInput
   replies?: Prisma.TicketReplyUncheckedCreateNestedManyWithoutUserInput
   projectMembers?: Prisma.ProjectMemberUncheckedCreateNestedManyWithoutUserInput
@@ -880,6 +984,9 @@ export type UserUpdateWithoutAnnouncementsInput = {
   color?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeenPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tickets?: Prisma.TicketUpdateManyWithoutAssigneeNestedInput
   replies?: Prisma.TicketReplyUpdateManyWithoutUserNestedInput
   projectMembers?: Prisma.ProjectMemberUpdateManyWithoutUserNestedInput
@@ -899,6 +1006,9 @@ export type UserUncheckedUpdateWithoutAnnouncementsInput = {
   color?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeenPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tickets?: Prisma.TicketUncheckedUpdateManyWithoutAssigneeNestedInput
   replies?: Prisma.TicketReplyUncheckedUpdateManyWithoutUserNestedInput
   projectMembers?: Prisma.ProjectMemberUncheckedUpdateManyWithoutUserNestedInput
@@ -917,6 +1027,9 @@ export type UserCreateWithoutAnnouncementReadsInput = {
   color?: string
   isActive?: boolean
   createdAt?: Date | string
+  lastSeenAt?: Date | string | null
+  lastActiveAt?: Date | string | null
+  lastSeenPath?: string | null
   tickets?: Prisma.TicketCreateNestedManyWithoutAssigneeInput
   replies?: Prisma.TicketReplyCreateNestedManyWithoutUserInput
   projectMembers?: Prisma.ProjectMemberCreateNestedManyWithoutUserInput
@@ -936,6 +1049,9 @@ export type UserUncheckedCreateWithoutAnnouncementReadsInput = {
   color?: string
   isActive?: boolean
   createdAt?: Date | string
+  lastSeenAt?: Date | string | null
+  lastActiveAt?: Date | string | null
+  lastSeenPath?: string | null
   tickets?: Prisma.TicketUncheckedCreateNestedManyWithoutAssigneeInput
   replies?: Prisma.TicketReplyUncheckedCreateNestedManyWithoutUserInput
   projectMembers?: Prisma.ProjectMemberUncheckedCreateNestedManyWithoutUserInput
@@ -970,6 +1086,9 @@ export type UserUpdateWithoutAnnouncementReadsInput = {
   color?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeenPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tickets?: Prisma.TicketUpdateManyWithoutAssigneeNestedInput
   replies?: Prisma.TicketReplyUpdateManyWithoutUserNestedInput
   projectMembers?: Prisma.ProjectMemberUpdateManyWithoutUserNestedInput
@@ -989,6 +1108,9 @@ export type UserUncheckedUpdateWithoutAnnouncementReadsInput = {
   color?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeenPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tickets?: Prisma.TicketUncheckedUpdateManyWithoutAssigneeNestedInput
   replies?: Prisma.TicketReplyUncheckedUpdateManyWithoutUserNestedInput
   projectMembers?: Prisma.ProjectMemberUncheckedUpdateManyWithoutUserNestedInput
@@ -1007,6 +1129,9 @@ export type UserCreateWithoutNotificationsInput = {
   color?: string
   isActive?: boolean
   createdAt?: Date | string
+  lastSeenAt?: Date | string | null
+  lastActiveAt?: Date | string | null
+  lastSeenPath?: string | null
   tickets?: Prisma.TicketCreateNestedManyWithoutAssigneeInput
   replies?: Prisma.TicketReplyCreateNestedManyWithoutUserInput
   projectMembers?: Prisma.ProjectMemberCreateNestedManyWithoutUserInput
@@ -1026,6 +1151,9 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   color?: string
   isActive?: boolean
   createdAt?: Date | string
+  lastSeenAt?: Date | string | null
+  lastActiveAt?: Date | string | null
+  lastSeenPath?: string | null
   tickets?: Prisma.TicketUncheckedCreateNestedManyWithoutAssigneeInput
   replies?: Prisma.TicketReplyUncheckedCreateNestedManyWithoutUserInput
   projectMembers?: Prisma.ProjectMemberUncheckedCreateNestedManyWithoutUserInput
@@ -1060,6 +1188,9 @@ export type UserUpdateWithoutNotificationsInput = {
   color?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeenPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tickets?: Prisma.TicketUpdateManyWithoutAssigneeNestedInput
   replies?: Prisma.TicketReplyUpdateManyWithoutUserNestedInput
   projectMembers?: Prisma.ProjectMemberUpdateManyWithoutUserNestedInput
@@ -1079,6 +1210,9 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   color?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeenPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tickets?: Prisma.TicketUncheckedUpdateManyWithoutAssigneeNestedInput
   replies?: Prisma.TicketReplyUncheckedUpdateManyWithoutUserNestedInput
   projectMembers?: Prisma.ProjectMemberUncheckedUpdateManyWithoutUserNestedInput
@@ -1097,6 +1231,9 @@ export type UserCreateWithoutTicketsInput = {
   color?: string
   isActive?: boolean
   createdAt?: Date | string
+  lastSeenAt?: Date | string | null
+  lastActiveAt?: Date | string | null
+  lastSeenPath?: string | null
   replies?: Prisma.TicketReplyCreateNestedManyWithoutUserInput
   projectMembers?: Prisma.ProjectMemberCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
@@ -1116,6 +1253,9 @@ export type UserUncheckedCreateWithoutTicketsInput = {
   color?: string
   isActive?: boolean
   createdAt?: Date | string
+  lastSeenAt?: Date | string | null
+  lastActiveAt?: Date | string | null
+  lastSeenPath?: string | null
   replies?: Prisma.TicketReplyUncheckedCreateNestedManyWithoutUserInput
   projectMembers?: Prisma.ProjectMemberUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
@@ -1150,6 +1290,9 @@ export type UserUpdateWithoutTicketsInput = {
   color?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeenPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   replies?: Prisma.TicketReplyUpdateManyWithoutUserNestedInput
   projectMembers?: Prisma.ProjectMemberUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
@@ -1169,6 +1312,9 @@ export type UserUncheckedUpdateWithoutTicketsInput = {
   color?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeenPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   replies?: Prisma.TicketReplyUncheckedUpdateManyWithoutUserNestedInput
   projectMembers?: Prisma.ProjectMemberUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
@@ -1187,6 +1333,9 @@ export type UserCreateWithoutRepliesInput = {
   color?: string
   isActive?: boolean
   createdAt?: Date | string
+  lastSeenAt?: Date | string | null
+  lastActiveAt?: Date | string | null
+  lastSeenPath?: string | null
   tickets?: Prisma.TicketCreateNestedManyWithoutAssigneeInput
   projectMembers?: Prisma.ProjectMemberCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
@@ -1206,6 +1355,9 @@ export type UserUncheckedCreateWithoutRepliesInput = {
   color?: string
   isActive?: boolean
   createdAt?: Date | string
+  lastSeenAt?: Date | string | null
+  lastActiveAt?: Date | string | null
+  lastSeenPath?: string | null
   tickets?: Prisma.TicketUncheckedCreateNestedManyWithoutAssigneeInput
   projectMembers?: Prisma.ProjectMemberUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
@@ -1240,6 +1392,9 @@ export type UserUpdateWithoutRepliesInput = {
   color?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeenPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tickets?: Prisma.TicketUpdateManyWithoutAssigneeNestedInput
   projectMembers?: Prisma.ProjectMemberUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
@@ -1259,6 +1414,9 @@ export type UserUncheckedUpdateWithoutRepliesInput = {
   color?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeenPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tickets?: Prisma.TicketUncheckedUpdateManyWithoutAssigneeNestedInput
   projectMembers?: Prisma.ProjectMemberUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
@@ -1277,6 +1435,9 @@ export type UserCreateWithoutProjectMembersInput = {
   color?: string
   isActive?: boolean
   createdAt?: Date | string
+  lastSeenAt?: Date | string | null
+  lastActiveAt?: Date | string | null
+  lastSeenPath?: string | null
   tickets?: Prisma.TicketCreateNestedManyWithoutAssigneeInput
   replies?: Prisma.TicketReplyCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
@@ -1296,6 +1457,9 @@ export type UserUncheckedCreateWithoutProjectMembersInput = {
   color?: string
   isActive?: boolean
   createdAt?: Date | string
+  lastSeenAt?: Date | string | null
+  lastActiveAt?: Date | string | null
+  lastSeenPath?: string | null
   tickets?: Prisma.TicketUncheckedCreateNestedManyWithoutAssigneeInput
   replies?: Prisma.TicketReplyUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
@@ -1330,6 +1494,9 @@ export type UserUpdateWithoutProjectMembersInput = {
   color?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeenPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tickets?: Prisma.TicketUpdateManyWithoutAssigneeNestedInput
   replies?: Prisma.TicketReplyUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
@@ -1349,6 +1516,9 @@ export type UserUncheckedUpdateWithoutProjectMembersInput = {
   color?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeenPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tickets?: Prisma.TicketUncheckedUpdateManyWithoutAssigneeNestedInput
   replies?: Prisma.TicketReplyUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
@@ -1462,6 +1632,9 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   color?: boolean
   isActive?: boolean
   createdAt?: boolean
+  lastSeenAt?: boolean
+  lastActiveAt?: boolean
+  lastSeenPath?: boolean
   tickets?: boolean | Prisma.User$ticketsArgs<ExtArgs>
   replies?: boolean | Prisma.User$repliesArgs<ExtArgs>
   projectMembers?: boolean | Prisma.User$projectMembersArgs<ExtArgs>
@@ -1483,6 +1656,9 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   color?: boolean
   isActive?: boolean
   createdAt?: boolean
+  lastSeenAt?: boolean
+  lastActiveAt?: boolean
+  lastSeenPath?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1495,6 +1671,9 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   color?: boolean
   isActive?: boolean
   createdAt?: boolean
+  lastSeenAt?: boolean
+  lastActiveAt?: boolean
+  lastSeenPath?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectScalar = {
@@ -1507,9 +1686,12 @@ export type UserSelectScalar = {
   color?: boolean
   isActive?: boolean
   createdAt?: boolean
+  lastSeenAt?: boolean
+  lastActiveAt?: boolean
+  lastSeenPath?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "password" | "isAdmin" | "role" | "color" | "isActive" | "createdAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "password" | "isAdmin" | "role" | "color" | "isActive" | "createdAt" | "lastSeenAt" | "lastActiveAt" | "lastSeenPath", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tickets?: boolean | Prisma.User$ticketsArgs<ExtArgs>
   replies?: boolean | Prisma.User$repliesArgs<ExtArgs>
@@ -1546,6 +1728,9 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     color: string
     isActive: boolean
     createdAt: Date
+    lastSeenAt: Date | null
+    lastActiveAt: Date | null
+    lastSeenPath: string | null
   }, ExtArgs["result"]["user"]>
   composites: {}
 }
@@ -1986,6 +2171,9 @@ export interface UserFieldRefs {
   readonly color: Prisma.FieldRef<"User", 'String'>
   readonly isActive: Prisma.FieldRef<"User", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
+  readonly lastSeenAt: Prisma.FieldRef<"User", 'DateTime'>
+  readonly lastActiveAt: Prisma.FieldRef<"User", 'DateTime'>
+  readonly lastSeenPath: Prisma.FieldRef<"User", 'String'>
 }
     
 
