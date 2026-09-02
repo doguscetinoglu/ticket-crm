@@ -68,6 +68,7 @@ export default function ProjeDetayPage() {
   const router = useRouter();
   const [me, setMe] = useState<{ id: number; type: string } | null>(null);
   const [deleting, setDeleting] = useState(false);
+  const [docModal, setDocModal] = useState(false);
   const [project, setProject] = useState<Project | null>(null);
   const [users, setUsers] = useState<User[]>([]);
   const [customers, setCustomers] = useState<{ id: number; name: string | null }[]>([]);
@@ -298,6 +299,10 @@ export default function ProjeDetayPage() {
             <button onClick={() => exportFile("txt")}
               className="flex items-center gap-1.5 px-3 py-1.5 bg-white/15 hover:bg-white/25 text-white text-xs font-semibold rounded-xl transition-all">
               📄 Rapor
+            </button>
+            <button onClick={() => setDocModal(true)}
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-white/15 hover:bg-white/25 text-white text-xs font-semibold rounded-xl transition-all">
+              📘 Doküman
             </button>
             {isAdmin && (
               <button onClick={deleteProject} disabled={deleting}
@@ -590,6 +595,48 @@ export default function ProjeDetayPage() {
               <button onClick={addTask} disabled={!taskForm.title.trim()}
                 className="flex-1 py-2.5 text-sm font-semibold bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl shadow-sm shadow-indigo-600/20 transition-all disabled:opacity-40">Ekle</button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Dokümantasyon — projenin adım/görev/yazışmalarından üretilir */}
+      {docModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => setDocModal(false)}>
+          <div className="bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800 rounded-2xl p-6 w-full max-w-lg shadow-2xl" onClick={e => e.stopPropagation()}>
+            <h3 className="text-base font-bold text-slate-900 dark:text-gray-100">Dokümantasyon Oluştur</h3>
+            <p className="text-xs text-slate-500 dark:text-gray-500 mt-1 mb-5">
+              Doküman bu projenin adımları, görevleri ve yazışmalarından üretilir. Hazırlanması yarım dakikayı bulabilir.
+            </p>
+
+            <div className="space-y-3">
+              {([
+                { type: "user", icon: "📗", title: "Müşteri Kullanım Dokümanı", desc: "Teslim kapsamı, süreç, müşteriden beklenenler, SSS" },
+                { type: "technical", icon: "📘", title: "Teknik Doküman", desc: "İş akışı, görev dökümü, açık işler, devir notları" },
+              ] as const).map(d => (
+                <div key={d.type} className="flex items-center gap-3 p-3.5 rounded-xl border border-slate-200 dark:border-gray-800 bg-slate-50/60 dark:bg-gray-800/40">
+                  <span className="text-xl shrink-0">{d.icon}</span>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-semibold text-slate-800 dark:text-gray-100">{d.title}</p>
+                    <p className="text-[11px] text-slate-500 dark:text-gray-500 leading-snug">{d.desc}</p>
+                  </div>
+                  <div className="flex gap-1.5 shrink-0">
+                    <button onClick={() => window.open(`/api/projects/${id}/docs?type=${d.type}`, "_blank")}
+                      className="px-2.5 py-1.5 text-xs font-semibold rounded-lg bg-slate-200 dark:bg-gray-700 text-slate-700 dark:text-gray-200 hover:bg-slate-300 dark:hover:bg-gray-600 transition-colors">
+                      HTML
+                    </button>
+                    <button onClick={() => window.open(`/api/projects/${id}/docs?type=${d.type}&print=1`, "_blank")}
+                      className="px-2.5 py-1.5 text-xs font-semibold rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white transition-colors">
+                      PDF
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <button onClick={() => setDocModal(false)}
+              className="w-full mt-5 py-2.5 text-sm text-slate-500 border border-slate-200 dark:border-gray-700 rounded-xl hover:text-slate-700 dark:hover:text-gray-300 transition-colors">
+              Kapat
+            </button>
           </div>
         </div>
       )}
