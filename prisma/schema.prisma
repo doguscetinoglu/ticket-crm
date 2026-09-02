@@ -248,6 +248,7 @@ model ProjectStep {
   name      String
   order     Int           @default(0)
   status    String        @default("Beklemede")
+  attachments String?     @default("[]") // adıma eklenen görseller/dosyalar (JSON dizi)
   tasks     ProjectTask[]
 
   @@map("project_steps")
@@ -264,6 +265,7 @@ model ProjectTask {
   status       String      @default("Beklemede")
   dueDate      DateTime?
   completedAt  DateTime?
+  attachments  String?     @default("[]") // göreve eklenen görseller/dosyalar (JSON dizi)
   createdAt    DateTime    @default(now())
 
   @@map("project_tasks")

@@ -298,7 +298,8 @@ export const ProjectStepScalarFieldEnum = {
   projectId: 'projectId',
   name: 'name',
   order: 'order',
-  status: 'status'
+  status: 'status',
+  attachments: 'attachments'
 } as const
 
 export type ProjectStepScalarFieldEnum = (typeof ProjectStepScalarFieldEnum)[keyof typeof ProjectStepScalarFieldEnum]
@@ -314,6 +315,7 @@ export const ProjectTaskScalarFieldEnum = {
   status: 'status',
   dueDate: 'dueDate',
   completedAt: 'completedAt',
+  attachments: 'attachments',
   createdAt: 'createdAt'
 } as const
 

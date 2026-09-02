@@ -66,6 +66,10 @@ export function renderPrintableDoc(o: DocOptions): string {
   th, td { border:1px solid var(--line); padding:7px 10px; text-align:left; vertical-align:top; }
   th { background:#f8fafc; font-weight:700; }
   hr { border:0; border-top:1px solid var(--line); margin:22px 0; }
+  .gallery { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; margin:10px 0 18px; }
+  figure { margin:0; break-inside:avoid; }
+  figure img { width:100%; border:1px solid var(--line); border-radius:8px; display:block; }
+  figcaption { color:var(--muted); font-size:11px; margin-top:5px; line-height:1.4; }
   .footer { margin-top:36px; padding-top:14px; border-top:1px solid var(--line);
             color:var(--muted); font-size:11.5px; display:flex; justify-content:space-between; gap:16px; }
   .empty { color:var(--muted); font-style:italic; }

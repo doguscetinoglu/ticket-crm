@@ -69,8 +69,20 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
       ...(body.assigneeType !== undefined && { assigneeType: body.assigneeType }),
       ...(body.dueDate !== undefined && { dueDate: body.dueDate ? new Date(body.dueDate) : null }),
       ...(body.description !== undefined && { description: body.description }),
+      ...(body.attachments !== undefined && {
+        attachments: JSON.stringify(Array.isArray(body.attachments) ? body.attachments : []),
+      }),
     },
   });
+
+  if (body.attachments !== undefined) {
+    await prisma.projectLog.create({
+      data: {
+        projectId, userId: session.id, userName: session.name,
+        action: `Görev "${task.title}": ekler güncellendi (${Array.isArray(body.attachments) ? body.attachments.length : 0} dosya)`,
+      },
+    });
+  }
 
   if (body.status) {
     await prisma.projectLog.create({

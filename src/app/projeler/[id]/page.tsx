@@ -6,8 +6,8 @@ import Link from "next/link";
 
 interface User { id: number; name: string; color: string; role: string; }
 interface Customer { id: number; name: string | null; company: string | null; email: string; }
-interface Task { id: number; title: string; description: string | null; status: string; assigneeId: number | null; assigneeType: string | null; dueDate: string | null; completedAt: string | null; }
-interface Step { id: number; name: string; order: number; status: string; tasks: Task[]; }
+interface Task { id: number; title: string; description: string | null; status: string; assigneeId: number | null; assigneeType: string | null; dueDate: string | null; completedAt: string | null; attachments: string | null; }
+interface Step { id: number; name: string; order: number; status: string; tasks: Task[]; attachments: string | null; }
 interface Member { user: User; }
 interface Project {
   id: number; name: string; description: string | null; status: string; createdAt: string;
@@ -16,6 +16,59 @@ interface Project {
 interface Log { id: number; userName: string | null; action: string; createdAt: string; }
 interface Attachment { url: string; name: string; size: number; type: string; }
 interface Message { id: number; userName: string | null; userType: string; body: string; attachments: string; createdAt: string; }
+
+function parseAttachments(raw: string | null | undefined): Attachment[] {
+  try { const v = JSON.parse(raw || "[]"); return Array.isArray(v) ? v : []; } catch { return []; }
+}
+
+/** Adım/görev altındaki görsel ve dosya şeridi. Dokümantasyon bu eklerden besleniyor. */
+function AttachmentStrip({ items, canEdit, uploading, onAdd, onRemove, compact }: {
+  items: Attachment[];
+  canEdit: boolean;
+  uploading: boolean;
+  onAdd: (files: FileList) => void;
+  onRemove: (index: number) => void;
+  compact?: boolean;
+}) {
+  if (!items.length && !canEdit) return null;
+  const size = compact ? "h-14 w-14" : "h-20 w-20";
+
+  return (
+    <div className="flex flex-wrap items-center gap-2 mt-2">
+      {items.map((a, i) => (
+        <div key={i} className="relative group/att">
+          <a href={a.url} target="_blank" rel="noopener noreferrer" title={a.name}>
+            {a.type?.startsWith("image/") ? (
+              <img src={a.url} alt={a.name}
+                className={`${size} object-cover rounded-lg border border-slate-200 dark:border-gray-700`} />
+            ) : (
+              <div className={`${size} rounded-lg border border-slate-200 dark:border-gray-700 bg-slate-50 dark:bg-gray-800 flex flex-col items-center justify-center px-1`}>
+                <span className="text-lg">📄</span>
+                <span className="text-[8px] text-slate-500 dark:text-gray-500 truncate w-full text-center">{a.name}</span>
+              </div>
+            )}
+          </a>
+          {canEdit && (
+            <button onClick={() => onRemove(i)} title="Kaldır"
+              className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-red-500 text-white text-[11px] leading-none opacity-0 group-hover/att:opacity-100 focus:opacity-100 transition-opacity">
+              ×
+            </button>
+          )}
+        </div>
+      ))}
+
+      {canEdit && (
+        <label className={`${size} rounded-lg border-2 border-dashed border-slate-200 dark:border-gray-700 flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-400 dark:text-gray-600 hover:border-indigo-400 hover:text-indigo-500 transition-colors ${uploading ? "opacity-50 pointer-events-none" : ""}`}>
+          {uploading
+            ? <span className="w-4 h-4 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" />
+            : <><span className="text-base leading-none">📷</span><span className="text-[9px] font-medium">Ekle</span></>}
+          <input type="file" accept="image/*,application/pdf" multiple className="hidden"
+            onChange={e => { if (e.target.files?.length) onAdd(e.target.files); e.target.value = ""; }} />
+        </label>
+      )}
+    </div>
+  );
+}
 
 type WhoWaiting = "customer" | "team" | "both" | "pending" | "syncing";
 interface WaitingInfo { step: string; who: WhoWaiting; label: string; }
@@ -69,6 +122,7 @@ export default function ProjeDetayPage() {
   const [me, setMe] = useState<{ id: number; type: string } | null>(null);
   const [deleting, setDeleting] = useState(false);
   const [docModal, setDocModal] = useState(false);
+  const [uploadingKey, setUploadingKey] = useState<string | null>(null);
   const [project, setProject] = useState<Project | null>(null);
   const [users, setUsers] = useState<User[]>([]);
   const [customers, setCustomers] = useState<{ id: number; name: string | null }[]>([]);
@@ -87,6 +141,8 @@ export default function ProjeDetayPage() {
   const chatBottomRef = useRef<HTMLDivElement>(null);
   const chatFileRef = useRef<HTMLInputElement>(null);
   const isAdmin = me?.type === "admin";
+  // Ekip üyeleri de görsel ekleyebilir; müşteri portalı oturumları ekleyemez.
+  const canAttach = me?.type === "admin" || me?.type === "agent";
 
   const fetchProject = useCallback(async () => {
     const r = await fetch(`/api/projects/${id}`);
@@ -115,6 +171,36 @@ export default function ProjeDetayPage() {
   useEffect(() => {
     chatBottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  // --- Adım/görev ekleri -------------------------------------------------
+  const saveAttachments = async (kind: "step" | "task", entityId: number, list: Attachment[]) => {
+    const url = kind === "step"
+      ? `/api/projects/${id}/steps/${entityId}`
+      : `/api/projects/${id}/tasks/${entityId}`;
+    await fetch(url, {
+      method: "PATCH", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ attachments: list }),
+    });
+    fetchProject(); fetchLogs();
+  };
+
+  const addAttachments = async (kind: "step" | "task", entityId: number, current: Attachment[], files: FileList) => {
+    setUploadingKey(`${kind}-${entityId}`);
+    const next = [...current];
+    for (const file of Array.from(files)) {
+      const fd = new FormData(); fd.append("file", file);
+      const res = await fetch("/api/upload", { method: "POST", body: fd });
+      if (res.ok) next.push(await res.json());
+      else alert((await res.json().catch(() => ({}))).error ?? "Dosya yüklenemedi");
+    }
+    await saveAttachments(kind, entityId, next);
+    setUploadingKey(null);
+  };
+
+  const removeAttachment = async (kind: "step" | "task", entityId: number, current: Attachment[], index: number) => {
+    if (!confirm(`"${current[index]?.name}" kaldırılsın mı?`)) return;
+    await saveAttachments(kind, entityId, current.filter((_, i) => i !== index));
+  };
 
   const updateTaskStatus = async (taskId: number, status: string) => {
     await fetch(`/api/projects/${id}/tasks/${taskId}`, {
@@ -380,6 +466,23 @@ export default function ProjeDetayPage() {
                   </div>
                 </div>
 
+                {/* Adım ekleri */}
+                {isExp && (() => {
+                  const atts = parseAttachments(step.attachments);
+                  return (
+                    <div className="px-4 pb-3 border-t border-slate-100 dark:border-gray-800 pt-3">
+                      <p className="text-[11px] font-semibold text-slate-400 dark:text-gray-600 uppercase tracking-wider">Adım görselleri</p>
+                      <AttachmentStrip
+                        items={atts}
+                        canEdit={canAttach}
+                        uploading={uploadingKey === `step-${step.id}`}
+                        onAdd={files => addAttachments("step", step.id, atts, files)}
+                        onRemove={i => removeAttachment("step", step.id, atts, i)}
+                      />
+                    </div>
+                  );
+                })()}
+
                 {/* Tasks */}
                 {isExp && (
                   <div className="border-t border-slate-100 dark:border-gray-800 divide-y divide-slate-50 dark:divide-gray-800/60">
@@ -394,13 +497,13 @@ export default function ProjeDetayPage() {
                       const canToggle = isAdmin || (me?.type === "agent" && task.assigneeId === me.id && task.assigneeType === "user");
 
                       return (
-                        <div key={task.id} className={`flex items-center gap-3 px-6 py-3 hover:bg-slate-50 dark:hover:bg-gray-800/30 transition-colors ${task.status === "Tamamlandı" ? "opacity-60" : ""}`}>
+                        <div key={task.id} className={`flex items-start gap-3 px-6 py-3 hover:bg-slate-50 dark:hover:bg-gray-800/30 transition-colors ${task.status === "Tamamlandı" ? "opacity-60" : ""}`}>
                           {/* Checkbox */}
                           <button
                             onClick={() => canToggle && updateTaskStatus(task.id, task.status === "Tamamlandı" ? "Beklemede" : task.status === "Beklemede" ? "Devam Ediyor" : "Tamamlandı")}
                             disabled={!canToggle}
                             title={canToggle ? undefined : "Bu görev size atanmamış"}
-                            className={`w-5 h-5 rounded-md border-2 flex items-center justify-center shrink-0 transition-all ${!canToggle ? "opacity-40 cursor-not-allowed" : "cursor-pointer"} ${task.status === "Tamamlandı" ? "bg-emerald-500 border-emerald-500 text-white" : task.status === "Devam Ediyor" ? "border-blue-500 bg-blue-50 dark:bg-blue-500/10" : "border-slate-300 dark:border-gray-600 hover:border-indigo-400"}`}>
+                            className={`w-5 h-5 mt-0.5 rounded-md border-2 flex items-center justify-center shrink-0 transition-all ${!canToggle ? "opacity-40 cursor-not-allowed" : "cursor-pointer"} ${task.status === "Tamamlandı" ? "bg-emerald-500 border-emerald-500 text-white" : task.status === "Devam Ediyor" ? "border-blue-500 bg-blue-50 dark:bg-blue-500/10" : "border-slate-300 dark:border-gray-600 hover:border-indigo-400"}`}>
                             {task.status === "Tamamlandı" && <span className="text-[10px]">✓</span>}
                             {task.status === "Devam Ediyor" && <span className="w-2 h-2 rounded-full bg-blue-500" />}
                           </button>
@@ -408,9 +511,22 @@ export default function ProjeDetayPage() {
                           <div className="flex-1 min-w-0">
                             <p className={`text-sm font-medium ${task.status === "Tamamlandı" ? "line-through text-slate-400 dark:text-gray-600" : "text-slate-700 dark:text-gray-300"}`}>{task.title}</p>
                             {task.description && <p className="text-xs text-slate-400 mt-0.5">{task.description}</p>}
+                            {(() => {
+                              const atts = parseAttachments(task.attachments);
+                              return (
+                                <AttachmentStrip
+                                  items={atts}
+                                  canEdit={canAttach}
+                                  uploading={uploadingKey === `task-${task.id}`}
+                                  onAdd={files => addAttachments("task", task.id, atts, files)}
+                                  onRemove={i => removeAttachment("task", task.id, atts, i)}
+                                  compact
+                                />
+                              );
+                            })()}
                           </div>
 
-                          <div className="flex items-center gap-2 shrink-0">
+                          <div className="flex items-center gap-2 shrink-0 mt-0.5">
                             {isOverdue && <span className="text-[10px] font-semibold text-red-500 bg-red-50 dark:bg-red-500/10 px-1.5 py-0.5 rounded-md">GECİKMİŞ</span>}
                             {task.dueDate && !isOverdue && (
                               <span className="text-[11px] text-slate-400 dark:text-gray-600">{new Date(task.dueDate).toLocaleDateString("tr-TR", { day: "2-digit", month: "short" })}</span>

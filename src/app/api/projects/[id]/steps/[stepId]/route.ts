@@ -13,17 +13,38 @@ async function syncProjectStatus(projectId: number) {
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string; stepId: string }> }) {
   const session = await getSession();
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (session.type === "customer") return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   const { id, stepId } = await params;
-  const { name, status } = await req.json();
+  const { name, status, attachments } = await req.json();
+
+  const before = attachments !== undefined
+    ? await prisma.projectStep.findUnique({ where: { id: parseInt(stepId) }, select: { attachments: true } })
+    : null;
 
   const step = await prisma.projectStep.update({
     where: { id: parseInt(stepId) },
     data: {
       ...(name !== undefined && { name }),
       ...(status !== undefined && { status }),
+      ...(attachments !== undefined && { attachments: JSON.stringify(Array.isArray(attachments) ? attachments : []) }),
     },
     include: { tasks: true },
   });
+
+  if (attachments !== undefined) {
+    const oldCount = JSON.parse(before?.attachments || "[]").length;
+    const newCount = Array.isArray(attachments) ? attachments.length : 0;
+    if (newCount !== oldCount) {
+      await prisma.projectLog.create({
+        data: {
+          projectId: parseInt(id), userId: session.id, userName: session.name,
+          action: newCount > oldCount
+            ? `Adım "${step.name}": ${newCount - oldCount} ek eklendi`
+            : `Adım "${step.name}": ${oldCount - newCount} ek kaldırıldı`,
+        },
+      });
+    }
+  }
 
   if (status) {
     await syncProjectStatus(parseInt(id));

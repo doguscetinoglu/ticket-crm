@@ -44,6 +44,7 @@ export type ProjectStepMinAggregateOutputType = {
   name: string | null
   order: number | null
   status: string | null
+  attachments: string | null
 }
 
 export type ProjectStepMaxAggregateOutputType = {
@@ -52,6 +53,7 @@ export type ProjectStepMaxAggregateOutputType = {
   name: string | null
   order: number | null
   status: string | null
+  attachments: string | null
 }
 
 export type ProjectStepCountAggregateOutputType = {
@@ -60,6 +62,7 @@ export type ProjectStepCountAggregateOutputType = {
   name: number
   order: number
   status: number
+  attachments: number
   _all: number
 }
 
@@ -82,6 +85,7 @@ export type ProjectStepMinAggregateInputType = {
   name?: true
   order?: true
   status?: true
+  attachments?: true
 }
 
 export type ProjectStepMaxAggregateInputType = {
@@ -90,6 +94,7 @@ export type ProjectStepMaxAggregateInputType = {
   name?: true
   order?: true
   status?: true
+  attachments?: true
 }
 
 export type ProjectStepCountAggregateInputType = {
@@ -98,6 +103,7 @@ export type ProjectStepCountAggregateInputType = {
   name?: true
   order?: true
   status?: true
+  attachments?: true
   _all?: true
 }
 
@@ -193,6 +199,7 @@ export type ProjectStepGroupByOutputType = {
   name: string
   order: number
   status: string
+  attachments: string | null
   _count: ProjectStepCountAggregateOutputType | null
   _avg: ProjectStepAvgAggregateOutputType | null
   _sum: ProjectStepSumAggregateOutputType | null
@@ -224,6 +231,7 @@ export type ProjectStepWhereInput = {
   name?: Prisma.StringFilter<"ProjectStep"> | string
   order?: Prisma.IntFilter<"ProjectStep"> | number
   status?: Prisma.StringFilter<"ProjectStep"> | string
+  attachments?: Prisma.StringNullableFilter<"ProjectStep"> | string | null
   project?: Prisma.XOR<Prisma.ProjectScalarRelationFilter, Prisma.ProjectWhereInput>
   tasks?: Prisma.ProjectTaskListRelationFilter
 }
@@ -234,6 +242,7 @@ export type ProjectStepOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   order?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  attachments?: Prisma.SortOrderInput | Prisma.SortOrder
   project?: Prisma.ProjectOrderByWithRelationInput
   tasks?: Prisma.ProjectTaskOrderByRelationAggregateInput
 }
@@ -247,6 +256,7 @@ export type ProjectStepWhereUniqueInput = Prisma.AtLeast<{
   name?: Prisma.StringFilter<"ProjectStep"> | string
   order?: Prisma.IntFilter<"ProjectStep"> | number
   status?: Prisma.StringFilter<"ProjectStep"> | string
+  attachments?: Prisma.StringNullableFilter<"ProjectStep"> | string | null
   project?: Prisma.XOR<Prisma.ProjectScalarRelationFilter, Prisma.ProjectWhereInput>
   tasks?: Prisma.ProjectTaskListRelationFilter
 }, "id">
@@ -257,6 +267,7 @@ export type ProjectStepOrderByWithAggregationInput = {
   name?: Prisma.SortOrder
   order?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  attachments?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.ProjectStepCountOrderByAggregateInput
   _avg?: Prisma.ProjectStepAvgOrderByAggregateInput
   _max?: Prisma.ProjectStepMaxOrderByAggregateInput
@@ -273,12 +284,14 @@ export type ProjectStepScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<"ProjectStep"> | string
   order?: Prisma.IntWithAggregatesFilter<"ProjectStep"> | number
   status?: Prisma.StringWithAggregatesFilter<"ProjectStep"> | string
+  attachments?: Prisma.StringNullableWithAggregatesFilter<"ProjectStep"> | string | null
 }
 
 export type ProjectStepCreateInput = {
   name: string
   order?: number
   status?: string
+  attachments?: string | null
   project: Prisma.ProjectCreateNestedOneWithoutStepsInput
   tasks?: Prisma.ProjectTaskCreateNestedManyWithoutStepInput
 }
@@ -289,6 +302,7 @@ export type ProjectStepUncheckedCreateInput = {
   name: string
   order?: number
   status?: string
+  attachments?: string | null
   tasks?: Prisma.ProjectTaskUncheckedCreateNestedManyWithoutStepInput
 }
 
@@ -296,6 +310,7 @@ export type ProjectStepUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   order?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  attachments?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   project?: Prisma.ProjectUpdateOneRequiredWithoutStepsNestedInput
   tasks?: Prisma.ProjectTaskUpdateManyWithoutStepNestedInput
 }
@@ -306,6 +321,7 @@ export type ProjectStepUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   order?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  attachments?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tasks?: Prisma.ProjectTaskUncheckedUpdateManyWithoutStepNestedInput
 }
 
@@ -315,12 +331,14 @@ export type ProjectStepCreateManyInput = {
   name: string
   order?: number
   status?: string
+  attachments?: string | null
 }
 
 export type ProjectStepUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   order?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  attachments?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ProjectStepUncheckedUpdateManyInput = {
@@ -329,6 +347,7 @@ export type ProjectStepUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   order?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  attachments?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ProjectStepListRelationFilter = {
@@ -347,6 +366,7 @@ export type ProjectStepCountOrderByAggregateInput = {
   name?: Prisma.SortOrder
   order?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  attachments?: Prisma.SortOrder
 }
 
 export type ProjectStepAvgOrderByAggregateInput = {
@@ -361,6 +381,7 @@ export type ProjectStepMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   order?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  attachments?: Prisma.SortOrder
 }
 
 export type ProjectStepMinOrderByAggregateInput = {
@@ -369,6 +390,7 @@ export type ProjectStepMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   order?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  attachments?: Prisma.SortOrder
 }
 
 export type ProjectStepSumOrderByAggregateInput = {
@@ -442,6 +464,7 @@ export type ProjectStepCreateWithoutProjectInput = {
   name: string
   order?: number
   status?: string
+  attachments?: string | null
   tasks?: Prisma.ProjectTaskCreateNestedManyWithoutStepInput
 }
 
@@ -450,6 +473,7 @@ export type ProjectStepUncheckedCreateWithoutProjectInput = {
   name: string
   order?: number
   status?: string
+  attachments?: string | null
   tasks?: Prisma.ProjectTaskUncheckedCreateNestedManyWithoutStepInput
 }
 
@@ -488,12 +512,14 @@ export type ProjectStepScalarWhereInput = {
   name?: Prisma.StringFilter<"ProjectStep"> | string
   order?: Prisma.IntFilter<"ProjectStep"> | number
   status?: Prisma.StringFilter<"ProjectStep"> | string
+  attachments?: Prisma.StringNullableFilter<"ProjectStep"> | string | null
 }
 
 export type ProjectStepCreateWithoutTasksInput = {
   name: string
   order?: number
   status?: string
+  attachments?: string | null
   project: Prisma.ProjectCreateNestedOneWithoutStepsInput
 }
 
@@ -503,6 +529,7 @@ export type ProjectStepUncheckedCreateWithoutTasksInput = {
   name: string
   order?: number
   status?: string
+  attachments?: string | null
 }
 
 export type ProjectStepCreateOrConnectWithoutTasksInput = {
@@ -525,6 +552,7 @@ export type ProjectStepUpdateWithoutTasksInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   order?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  attachments?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   project?: Prisma.ProjectUpdateOneRequiredWithoutStepsNestedInput
 }
 
@@ -534,6 +562,7 @@ export type ProjectStepUncheckedUpdateWithoutTasksInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   order?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  attachments?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ProjectStepCreateManyProjectInput = {
@@ -541,12 +570,14 @@ export type ProjectStepCreateManyProjectInput = {
   name: string
   order?: number
   status?: string
+  attachments?: string | null
 }
 
 export type ProjectStepUpdateWithoutProjectInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   order?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  attachments?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tasks?: Prisma.ProjectTaskUpdateManyWithoutStepNestedInput
 }
 
@@ -555,6 +586,7 @@ export type ProjectStepUncheckedUpdateWithoutProjectInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   order?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  attachments?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tasks?: Prisma.ProjectTaskUncheckedUpdateManyWithoutStepNestedInput
 }
 
@@ -563,6 +595,7 @@ export type ProjectStepUncheckedUpdateManyWithoutProjectInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   order?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  attachments?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -602,6 +635,7 @@ export type ProjectStepSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   name?: boolean
   order?: boolean
   status?: boolean
+  attachments?: boolean
   project?: boolean | Prisma.ProjectDefaultArgs<ExtArgs>
   tasks?: boolean | Prisma.ProjectStep$tasksArgs<ExtArgs>
   _count?: boolean | Prisma.ProjectStepCountOutputTypeDefaultArgs<ExtArgs>
@@ -613,6 +647,7 @@ export type ProjectStepSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   name?: boolean
   order?: boolean
   status?: boolean
+  attachments?: boolean
   project?: boolean | Prisma.ProjectDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["projectStep"]>
 
@@ -622,6 +657,7 @@ export type ProjectStepSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   name?: boolean
   order?: boolean
   status?: boolean
+  attachments?: boolean
   project?: boolean | Prisma.ProjectDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["projectStep"]>
 
@@ -631,9 +667,10 @@ export type ProjectStepSelectScalar = {
   name?: boolean
   order?: boolean
   status?: boolean
+  attachments?: boolean
 }
 
-export type ProjectStepOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "projectId" | "name" | "order" | "status", ExtArgs["result"]["projectStep"]>
+export type ProjectStepOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "projectId" | "name" | "order" | "status" | "attachments", ExtArgs["result"]["projectStep"]>
 export type ProjectStepInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   project?: boolean | Prisma.ProjectDefaultArgs<ExtArgs>
   tasks?: boolean | Prisma.ProjectStep$tasksArgs<ExtArgs>
@@ -658,6 +695,7 @@ export type $ProjectStepPayload<ExtArgs extends runtime.Types.Extensions.Interna
     name: string
     order: number
     status: string
+    attachments: string | null
   }, ExtArgs["result"]["projectStep"]>
   composites: {}
 }
@@ -1088,6 +1126,7 @@ export interface ProjectStepFieldRefs {
   readonly name: Prisma.FieldRef<"ProjectStep", 'String'>
   readonly order: Prisma.FieldRef<"ProjectStep", 'Int'>
   readonly status: Prisma.FieldRef<"ProjectStep", 'String'>
+  readonly attachments: Prisma.FieldRef<"ProjectStep", 'String'>
 }
     
 

@@ -15,6 +15,33 @@ const TITLES: Record<DocType, string> = {
   technical: "Teknik Doküman",
 };
 
+interface Attachment { url: string; name: string; type?: string; }
+
+const VISION_TYPES = ["image/jpeg", "image/png", "image/gif", "image/webp"];
+const MAX_IMAGES = 12;
+
+function parseAttachments(raw: string | null): Attachment[] {
+  try { const v = JSON.parse(raw || "[]"); return Array.isArray(v) ? v : []; } catch { return []; }
+}
+
+interface LabeledImage { url: string; label: string; }
+
+/** Adım ve görevlere eklenmiş görseller — dokümanı bunlara dayandırıyoruz. */
+function collectImages(p: ProjectWithRelations): LabeledImage[] {
+  const out: LabeledImage[] = [];
+  for (const step of p.steps) {
+    for (const a of parseAttachments(step.attachments)) {
+      if (a.type && VISION_TYPES.includes(a.type)) out.push({ url: a.url, label: `Adım "${step.name}" — ${a.name}` });
+    }
+    for (const t of step.tasks) {
+      for (const a of parseAttachments(t.attachments)) {
+        if (a.type && VISION_TYPES.includes(a.type)) out.push({ url: a.url, label: `Adım "${step.name}" / Görev "${t.title}" — ${a.name}` });
+      }
+    }
+  }
+  return out.slice(0, MAX_IMAGES);
+}
+
 /** Modelin göreceği proje bağlamı — yalnızca gerçekten kayıtlı olan veriler. */
 function buildContext(p: ProjectWithRelations): string {
   const lines: string[] = [];
@@ -28,12 +55,16 @@ function buildContext(p: ProjectWithRelations): string {
   lines.push("", "ADIMLAR VE GÖREVLER:");
   for (const [i, step] of p.steps.entries()) {
     lines.push(`${i + 1}. ADIM: ${step.name} [${step.status}]`);
+    const stepAtts = parseAttachments(step.attachments);
+    if (stepAtts.length) lines.push(`   ekli dosyalar: ${stepAtts.map(a => a.name).join(", ")}`);
     if (step.tasks.length === 0) lines.push("   (bu adımda tanımlı görev yok)");
     for (const t of step.tasks) {
       const who = t.assigneeType === "customer" ? "müşteride" : t.assigneeId ? "ekipte" : "atanmamış";
       const due = t.dueDate ? `, termin ${t.dueDate.toLocaleDateString("tr-TR")}` : "";
       lines.push(`   - ${t.title} [${t.status}, ${who}${due}]`);
       if (t.description) lines.push(`     açıklama: ${t.description}`);
+      const taskAtts = parseAttachments(t.attachments);
+      if (taskAtts.length) lines.push(`     ekli dosyalar: ${taskAtts.map(a => a.name).join(", ")}`);
     }
   }
 
@@ -63,7 +94,14 @@ Kurallar:
 - Bir konu veride yoksa ve doküman için gerekliyse "Bu bölüm proje ekibi tarafından netleştirilecektir." yaz.
 - Çıktıyı Markdown olarak ver. Kod bloğu (\`\`\`) kullanma, belge başlığı (tek #) yazma — bölümler ## ile başlasın.
 - Türkçe, sade ve profesyonel bir dil kullan. Şişirme, gereksiz tekrar ve pazarlama dili yok.
-- Tabloları uygun yerlerde kullan (adım/görev/sorumluluk dökümleri için).`;
+- Tabloları uygun yerlerde kullan (adım/görev/sorumluluk dökümleri için).
+
+Görseller: Adımlara ve görevlere ekran görüntüsü/fotoğraf eklenmiş olabilir; her görselden önce
+hangi adım/göreve ait olduğu yazar. Bu görseller dokümanın en güvenilir kaynağıdır:
+- Ekran adlarını, menü/alan/buton isimlerini ve akış sırasını görselde gerçekten yazdığı gibi kullan.
+- Adım adım anlatımları görseldeki gerçek ekranlara dayandır.
+- Görselde okuyamadığın bir şeyi tahmin etme; okunmuyorsa o ayrıntıya hiç girme.
+- Görsele atıf yaparken "\"X\" adımındaki ekran görüntüsünde..." gibi ait olduğu adımın adını kullan.`;
 
 const PROMPTS: Record<DocType, string> = {
   user: `Bu proje için MÜŞTERİYE VERİLECEK bir kullanım/teslim dokümanı yaz.
@@ -144,15 +182,25 @@ async function generateMarkdown(p: ProjectWithRelations, type: DocType): Promise
   if (!apiKey) return fallbackMarkdown(p, type);
   try {
     const client = new Anthropic({ apiKey });
+
+    const images = collectImages(p);
+    const content: Anthropic.ContentBlockParam[] = [
+      { type: "text", text: `${PROMPTS[type]}\n\n--- PROJE VERİSİ ---\n${buildContext(p)}` },
+    ];
+    if (images.length) {
+      content.push({ type: "text", text: `--- EKLİ GÖRSELLER (${images.length} adet) ---` });
+      for (const [i, img] of images.entries()) {
+        content.push({ type: "text", text: `GÖRSEL ${i + 1} — ${img.label}` });
+        content.push({ type: "image", source: { type: "url", url: img.url } });
+      }
+    }
+
     const stream = client.messages.stream({
       model: "claude-opus-5",
       max_tokens: 16000,
       output_config: { effort: "medium" },
       system: SYSTEM,
-      messages: [{
-        role: "user",
-        content: `${PROMPTS[type]}\n\n--- PROJE VERİSİ ---\n${buildContext(p)}`,
-      }],
+      messages: [{ role: "user", content }],
     });
     const msg = await stream.finalMessage();
     if (msg.stop_reason === "refusal") return fallbackMarkdown(p, type);
@@ -185,6 +233,16 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 
   const markdown = await generateMarkdown(project, type);
 
+  // Ekli görseller belgenin sonuna ek olarak konur — okuyucu anlatılanı ekranda görebilsin.
+  const images = collectImages(project);
+  const escAttr = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  const galleryHtml = images.length
+    ? `<h2>Ek: Adım ve Görev Görselleri</h2><div class="gallery">` +
+      images.map((im, i) =>
+        `<figure><img src="${escAttr(im.url)}" alt="${escAttr(im.label)}" /><figcaption>Görsel ${i + 1} — ${escAttr(im.label)}</figcaption></figure>`,
+      ).join("") + `</div>`
+    : "";
+
   const html = renderPrintableDoc({
     title: `${project.name} — ${TITLES[type]}`,
     subtitle: type === "user"
@@ -195,8 +253,9 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
       { label: "Proje durumu", value: project.status },
       { label: "Adım / görev", value: `${project.steps.length} / ${project.steps.flatMap(s => s.tasks).length}` },
       { label: "Ekip", value: project.members.map(m => m.user.name).join(", ") || "-" },
+      ...(images.length ? [{ label: "Kullanılan görsel", value: String(images.length) }] : []),
     ],
-    bodyHtml: markdownToHtml(markdown),
+    bodyHtml: markdownToHtml(markdown) + galleryHtml,
     print: wantsPrint,
     footerNote: `${project.name} · ${TITLES[type]} · AnahtarDestek`,
   });
